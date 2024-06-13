@@ -1,7 +1,15 @@
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+
+import Home from '@/template/Home'
 
 function App() {
-  return <BrowserRouter>ronaldo</BrowserRouter>
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Home />} />
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
 export default App
