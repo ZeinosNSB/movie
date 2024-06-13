@@ -1,5 +1,7 @@
+import { BrowserRouter } from 'react-router-dom'
+
 function App() {
-  return <>ronaldo</>
+  return <BrowserRouter>ronaldo</BrowserRouter>
 }
 
 export default App
