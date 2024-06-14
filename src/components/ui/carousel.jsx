@@ -61,13 +61,13 @@ const Carousel = React.forwardRef(
       [api]
     )
 
-    let effectivedotsPosition = dotsPosition
+    let effectiveDotsPosition = dotsPosition
     if (orientation === 'horizontal' && (dotsPosition === 'left' || dotsPosition === 'right')) {
       console.warn(`Invalid dotsPosition "${dotsPosition}" for horizontal orientation, defaulting to "bottom".`)
-      effectivedotsPosition = 'bottom'
+      effectiveDotsPosition = 'bottom'
     } else if (orientation === 'vertical' && (dotsPosition === 'top' || dotsPosition === 'bottom')) {
       console.warn(`Invalid dotsPosition "${dotsPosition}" for vertical orientation, defaulting to "left".`)
-      effectivedotsPosition = 'left'
+      effectiveDotsPosition = 'left'
     }
 
     const handleKeyDown = React.useCallback(
@@ -112,7 +112,7 @@ const Carousel = React.forwardRef(
           api: api,
           opts,
           orientation: orientation || (opts?.axis === 'y' ? 'vertical' : 'horizontal'),
-          dotsPosition: effectivedotsPosition,
+          dotsPosition: effectiveDotsPosition,
           scrollPrev,
           scrollNext,
           scrollTo,

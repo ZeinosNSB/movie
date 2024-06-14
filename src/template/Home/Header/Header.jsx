@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 
 function Header() {
   return (
-    <header className='sticky bg-opacity-40 bg-slate-600'>
+    <header className='fixed bg-opacity-40 bg-slate-600 z-10 w-full'>
       <nav className='mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8' aria-label='Global'>
         <div className='flex lg:flex-1'>
           <a href='#' className='-m-1.5 p-1.5'>
@@ -20,10 +20,8 @@ function Header() {
           <NavLink
             to='/home'
             className={({ isActive }) =>
-              `font-semibold leading-10 ${
-                isActive
-                  ? 'text-slate-700 border-b-2 border-transparent border-slate-600'
-                  : 'text-slate-100 hover:text-slate-600 '
+              `font-semibold leading-8 w-24 text-center ${
+                isActive ? 'text-orange-300 border-2 border-transparent rounded-3xl bg-slate-900' : 'text-slate-100  '
               } `
             }
           >
@@ -32,10 +30,8 @@ function Header() {
           <NavLink
             to='/news'
             className={({ isActive }) =>
-              `font-semibold leading-10 ${
-                isActive
-                  ? 'text-slate-700 border-b-2 border-transparent border-slate-600'
-                  : 'text-slate-100 hover:text-slate-600 '
+              `font-semibold leading-8 w-24 text-center ${
+                isActive ? 'text-orange-300 border-2 border-transparent rounded-3xl bg-slate-900' : 'text-slate-100  '
               } `
             }
           >
@@ -44,10 +40,10 @@ function Header() {
           <NavLink
             to='/contact'
             className={({ isActive }) =>
-              `font-semibold leading-10 ${
+              `font-semibold leading-8 w-24 text-center ${
                 isActive
-                  ? 'text-slate-700 border-b-2 border-transparent border-slate-600'
-                  : 'text-slate-100 hover:text-slate-600 '
+                  ? 'text-orange-300 border-2 border-transparent rounded rounded-3xl bg-slate-900'
+                  : 'text-slate-100  '
               } `
             }
           >
