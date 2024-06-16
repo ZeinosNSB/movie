@@ -2,8 +2,8 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 
 import axiosBaseQuery from '@/service/axiosBaseQuery'
 
-export const filmManagementApi = createApi({
-  reducerPath: 'filmManagementApi',
+export const filmApi = createApi({
+  reducerPath: 'filmApi',
   baseQuery: axiosBaseQuery(),
   endpoints: build => ({
     getBannerFilm: build.query({
@@ -18,4 +18,4 @@ export const filmManagementApi = createApi({
   })
 })
 
-export const { useGetBannerFilmQuery } = filmManagementApi
+export const { useGetBannerFilmQuery, useGetFilmListQuery } = filmApi

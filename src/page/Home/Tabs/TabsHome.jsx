@@ -1,53 +1,45 @@
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useGetCinemaShowtimeInfoQuery } from '@/redux/api/cinema.service'
+import { GROUP_ID } from '@/utils/settingSystems'
 
 function TabsHome() {
+  const { data: cinemaShowtimeInfo } = useGetCinemaShowtimeInfoQuery({ maNhom: GROUP_ID })
+
   return (
-    <Tabs defaultValue='account' className='w-[400px] mx-auto' orientation='vertical'>
-      <TabsList>
-        <TabsTrigger value='account'>Ronaldo</TabsTrigger>
-        <TabsTrigger value='password'>Password</TabsTrigger>
+    <Tabs defaultValue='BHDStar' className='w-full max-w-7xl m-auto sm:px-6 lg:px-10 py-6' orientation='vertical'>
+      <TabsList className='bg-white'>
+        {cinemaShowtimeInfo?.content.map(cinemas => (
+          <TabsTrigger
+            value={cinemas.maHeThongRap}
+            key={cinemas.maHeThongRap}
+            className='border-r-4 border-transparent data-[state=active]:border-orange-300'
+          >
+            <img className='rounded-full w-14' src={cinemas.logo} alt={cinemas.tenHeThongRap} />
+          </TabsTrigger>
+        ))}
       </TabsList>
-      <TabsContent value='account'>
-        <Card>
-          <CardHeader>
-            <CardTitle>Account</CardTitle>
-            <CardDescription>Make changes to your account here. Click save when done.</CardDescription>
-          </CardHeader>
-          <CardContent className='space-y-2'>
-            <div className='space-y-1'>
-              <Input id='name' defaultValue='Pedro Duarte' />
-            </div>
-            <div className='space-y-1'>
-              <Input id='username' defaultValue='@peduarte' />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button>Save changes</Button>
-          </CardFooter>
-        </Card>
-      </TabsContent>
-      <TabsContent value='password'>
-        <Card>
-          <CardHeader>
-            <CardTitle>Password</CardTitle>
-            <CardDescription>Change your password here. After saving, be logged out.</CardDescription>
-          </CardHeader>
-          <CardContent className='space-y-2'>
-            <div className='space-y-1'>
-              <Input id='current' type='password' />
-            </div>
-            <div className='space-y-1'>
-              <Input id='new' type='password' />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button>Save password</Button>
-          </CardFooter>
-        </Card>
-      </TabsContent>
+      <ScrollArea className='h-96'>
+        {cinemaShowtimeInfo?.content.map(cinemas => (
+          <TabsContent value={cinemas.maHeThongRap} key={cinemas.maHeThongRap}>
+            {cinemas.lstCumRap.map(cinema => (
+              <TabsList key={cinema.maCumRap} className='bg-white items-start'>
+                <TabsTrigger
+                  value={cinema.maHeThongRap}
+                  key={cinema.maHeThongRap}
+                  className='justify-between border-r-4 border-transparent data-[state=active]:border-orange-300'
+                >
+                  <img className='rounded-full w-14' src={cinema.hinhAnh} alt={cinema.tenCumRap} />
+                  <div className='text-start ml-4'>
+                    <p>{cinema.tenCumRap}</p>
+                    <p>{cinema.diaChi}</p>
+                  </div>
+                </TabsTrigger>
+              </TabsList>
+            ))}
+          </TabsContent>
+        ))}
+      </ScrollArea>
     </Tabs>
   )
 }

@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import { filmManagementApi } from '@/redux/api/film-management.service'
+import { cinemaApi } from '@/redux/api/cinema.service'
+import { filmApi } from '@/redux/api/film.service'
 
 const store = configureStore({
   reducer: {
-    [filmManagementApi.reducerPath]: filmManagementApi.reducer
+    [filmApi.reducerPath]: filmApi.reducer,
+    [cinemaApi.reducerPath]: cinemaApi.reducer
   },
-  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(filmManagementApi.middleware)
+  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(filmApi.middleware).concat(cinemaApi.middleware)
 })
 
 export default store

@@ -1,0 +1,39 @@
+.flip-container {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
+}
+
+.flip-card-front,
+.flip-card-back {
+    backface-visibility: hidden;
+    box-shadow: 10px 10px 20px #bebebe, -10px -10px 20px #ffffff;
+    transform-style: preserve-3d;
+}
+
+.flip-card-back {
+    transform: rotateY(180deg);
+}
+
+.flip-container:hover .flip-card-front {
+    transform: rotateY(180deg);
+}
+
+.flip-container:hover .flip-card-back {
+    transform: rotateY(360deg);
+}
+
+.flip-container.is-flipped .flip-card-front {
+    transform: rotateY(180deg);
+}
+
+.flip-container.is-flipped .flip-card-back {
+    transform: rotateY(360deg);
+}
+
+.flip-container .flip-card-back h2,
+.flip-container .flip-card-back img,
+.flip-container .flip-card-back h3,
+.flip-container .flip-card-back div {
+    transform: translateZ(30px);
+}

@@ -1,4 +1,5 @@
 import Autoplay from 'embla-carousel-autoplay'
+import Fade from 'embla-carousel-fade'
 import { useRef } from 'react'
 
 import {
@@ -9,22 +10,16 @@ import {
   CarouselNext,
   CarouselPrevious
 } from '@/components/ui/carousel'
-import { useGetBannerFilmQuery } from '@/redux/api/film-management.service'
+import { useGetBannerFilmQuery } from '@/redux/api/film.service'
 
 function CarouselHome() {
-  const plugin = useRef(Autoplay({ delay: 5000, stopOnInteraction: false }))
+  const autoplay = useRef(Autoplay({ delay: 5000, stopOnMouseEnter: true }))
+  const fade = useRef(Fade())
 
   const { data: banners } = useGetBannerFilmQuery()
-  console.log(banners?.content)
 
   return (
-    <Carousel
-      opts={{ loop: true }}
-      plugins={[plugin.current]}
-      className='w-full m-auto'
-      onMouseEnter={plugin.current.stop}
-      onMouseLeave={plugin.current.reset}
-    >
+    <Carousel opts={{ loop: true }} plugins={[autoplay.current, fade.current]} className='w-full m-auto'>
       <CarouselContent>
         {banners?.content.map(banner => (
           <CarouselItem key={banner.maBanner}>
