@@ -1,9 +1,12 @@
+import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
 
-function Header() {
+const tabs = ['Home', 'News', 'Contact']
+
+const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false)
 
   useEffect(() => {
@@ -22,49 +25,45 @@ function Header() {
   }, [])
 
   return (
-    <header className={`fixed z-10 w-full ${isScrolled ? 'bg-slate-600' : 'bg-transparent'}`}>
-      <nav className='mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8' aria-label='Global'>
+    <header
+      className={`fixed z-10 w-full ${isScrolled ? 'bg-slate-200' : 'bg-transparent'} transition-colors duration-200 ease-in`}
+    >
+      <nav className='mx-auto w-full flex max-w-7xl items-center justify-between p-6 lg:px-8'>
         <div className='flex lg:flex-1'>
-          <a href='#' className='-m-1.5 p-1.5'>
+          <NavLink to='/' className='-m-1.5 p-1.5'>
             <span className='sr-only'>Your Company</span>
             <img
               className='h-10'
               src='https://cyberlearn.vn/wp-content/uploads/2020/03/cyberlearn-min-new-opt2.png'
               alt='CyberSoft'
             />
-          </a>
+          </NavLink>
         </div>
         <div className='text-sm lg:flex lg:gap-x-12'>
-          <NavLink
-            to='/home'
-            className={({ isActive }) =>
-              `font-semibold leading-8 w-24 text-center ${
-                isActive ? 'text-orange-300 border-2 border-transparent rounded-3xl bg-slate-900' : 'text-slate-100'
-              }`
-            }
-          >
-            Home
-          </NavLink>
-          <NavLink
-            to='/news'
-            className={({ isActive }) =>
-              `font-semibold leading-8 w-24 text-center ${
-                isActive ? 'text-orange-300 border-2 border-transparent rounded-3xl bg-slate-900' : 'text-slate-100'
-              }`
-            }
-          >
-            News
-          </NavLink>
-          <NavLink
-            to='/contact'
-            className={({ isActive }) =>
-              `font-semibold leading-8 w-24 text-center ${
-                isActive ? 'text-orange-300 border-2 border-transparent rounded-3xl bg-slate-900' : 'text-slate-100'
-              }`
-            }
-          >
-            Contact
-          </NavLink>
+          {tabs.map(tab => (
+            <NavLink
+              to={tab.toLowerCase()}
+              key={tab}
+              className={({ isActive }) =>
+                `${
+                  isActive ? 'text-orange-300' : 'text-slate-100 hover:text-slate-200 hover:bg-slate-700'
+                } font-semibold text-center leading-8 w-24 text-sm transition-colors rounded-3xl relative py-0.5`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  <div className='relative z-10'>{tab}</div>
+                  {isActive && (
+                    <motion.div
+                      layoutId='pill-tab'
+                      transition={{ type: 'spring', duration: 0.5 }}
+                      className='absolute inset-0 z-0 bg-slate-900 rounded-3xl'
+                    />
+                  )}
+                </>
+              )}
+            </NavLink>
+          ))}
         </div>
         <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
           <NavLink to='/signin' className='font-semibold leading-6 text-gray-900'>
