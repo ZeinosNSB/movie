@@ -12,12 +12,12 @@ import { GROUP_ID } from '@/utils/settingSystems'
 const MotionTabsTrigger = motion(TabsTrigger)
 
 function TabsHome() {
-  const { data: cinemaShowtimeInfo } = useGetCinemaShowtimeInfoQuery({ maNhom: GROUP_ID })
   const [activeTab, setActiveTab] = useState('BHDStar')
+  const { data: cinemaShowtimeInfo } = useGetCinemaShowtimeInfoQuery({ maNhom: GROUP_ID })
 
   useEffect(() => {
     cinemaShowtimeInfo && setActiveTab(cinemaShowtimeInfo.content[0].maHeThongRap)
-  }, [])
+  }, [cinemaShowtimeInfo])
 
   return (
     <Tabs defaultValue={activeTab} className='w-full max-w-7xl m-auto sm:px-6 lg:px-10 py-6' orientation='vertical'>

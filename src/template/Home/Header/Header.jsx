@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
 
@@ -8,12 +8,10 @@ const tabs = ['Home', 'News', 'Contact']
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false)
-  const location = useLocation()
-  const isHome = location.pathname.startsWith('/home')
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 500) {
+      if (window.scrollY > 250) {
         setIsScrolled(true)
       } else {
         setIsScrolled(false)
@@ -28,8 +26,7 @@ const Header = () => {
 
   return (
     <header
-      className={`${isHome && 'fixed'} z-10 w-full ${isHome ? (isScrolled ? 'bg-gray-800' : 'bg-transparent') : 'bg-gray-800'} transition-colors' +
-      ' duration-200 ease-in`}
+      className={`fixed z-10 w-full ${isScrolled ? 'bg-gray-800' : 'bg-transparent'} transition-colors duration-200 ease-in`}
     >
       <nav className='mx-auto w-full flex max-w-7xl items-center justify-between p-6 lg:px-8'>
         <div className='flex lg:flex-1'>

@@ -12,7 +12,7 @@ function Footer() {
   const { data: listCinema } = useGetCinemaInfoQuery()
 
   return (
-    <footer className='mt-6 bg-gray-800'>
+    <footer className='bg-gray-800'>
       <div className='w-full max-w-7xl mx-auto'>
         <div className='px-4 sm:px-6 lg:px-8'>
           <div className='py-8 grid grid-cols-12 gap-x-5 gap-y-8'>
