@@ -6,6 +6,9 @@ export const cinemaApi = createApi({
   reducerPath: 'cinemaApi',
   baseQuery: axiosBaseQuery(),
   endpoints: build => ({
+    getCinemaInfo: build.query({
+      query: () => 'QuanLyRap/LayThongTinHeThongRap'
+    }),
     getCinemaShowtimeInfo: build.query({
       query: ({ maNhom, maHeThongRap }) => ({
         url: 'QuanLyRap/LayThongTinLichChieuHeThongRap',
@@ -15,4 +18,4 @@ export const cinemaApi = createApi({
   })
 })
 
-export const { useGetCinemaShowtimeInfoQuery } = cinemaApi
+export const { useGetCinemaInfoQuery, useGetCinemaShowtimeInfoQuery } = cinemaApi

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
 
@@ -8,6 +8,8 @@ const tabs = ['Home', 'News', 'Contact']
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false)
+  const location = useLocation()
+  const isHome = location.pathname.startsWith('/home')
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,7 +28,8 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed z-10 w-full ${isScrolled ? 'bg-slate-200' : 'bg-transparent'} transition-colors duration-200 ease-in`}
+      className={`${isHome && 'fixed'} z-10 w-full ${isHome ? (isScrolled ? 'bg-gray-800' : 'bg-transparent') : 'bg-gray-800'} transition-colors' +
+      ' duration-200 ease-in`}
     >
       <nav className='mx-auto w-full flex max-w-7xl items-center justify-between p-6 lg:px-8'>
         <div className='flex lg:flex-1'>
@@ -46,8 +49,8 @@ const Header = () => {
               key={tab}
               className={({ isActive }) =>
                 `${
-                  isActive ? 'text-orange-300' : 'text-slate-100 hover:text-slate-200 hover:bg-slate-700'
-                } font-semibold text-center leading-8 w-24 text-sm transition-colors rounded-3xl relative py-0.5`
+                  !isActive && 'hover:text-slate-200 hover:bg-slate-700'
+                } text-slate-100 font-semibold text-center leading-8 w-24 text-sm transition-colors rounded-3xl relative py-0.5`
               }
             >
               {({ isActive }) => (
@@ -57,7 +60,7 @@ const Header = () => {
                     <motion.div
                       layoutId='pill-tab'
                       transition={{ type: 'spring', duration: 0.5 }}
-                      className='absolute inset-0 z-0 bg-slate-900 rounded-3xl'
+                      className='absolute inset-0 z-0 bg-orange-500 rounded-3xl'
                     />
                   )}
                 </>
@@ -70,7 +73,7 @@ const Header = () => {
             <Button variant='outline'>Sign In</Button>
           </NavLink>
           <NavLink to='/signup' className='pl-2 font-semibold leading-6 text-gray-900'>
-            <Button>Sign Up</Button>
+            <Button className='bg-orange-500'>Sign Up</Button>
           </NavLink>
         </div>
       </nav>
