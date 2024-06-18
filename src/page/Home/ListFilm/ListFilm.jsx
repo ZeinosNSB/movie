@@ -4,7 +4,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import CardFilm from '@/page/Home/ListFilm/CardFilm'
 import { useGetFilmListQuery } from '@/redux/api/film.service'
-import { GROUP_ID } from '@/utils/settingSystems'
+import { GROUP_ID } from '@/utils/config'
 
 function ListFilm() {
   const { data: listFilm } = useGetFilmListQuery({ maNhom: GROUP_ID })

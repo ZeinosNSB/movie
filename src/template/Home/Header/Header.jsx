@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
 
@@ -8,6 +8,8 @@ const tabs = ['Home', 'News', 'Contact']
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false)
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -67,10 +69,24 @@ const Header = () => {
         </div>
         <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
           <NavLink to='/signin' className='font-semibold leading-6 text-gray-900'>
-            <Button variant='outline'>Sign In</Button>
+            <Button
+              variant='outline'
+              onClick={() => {
+                navigate('/signin')
+              }}
+            >
+              Sign In
+            </Button>
           </NavLink>
           <NavLink to='/signup' className='pl-2 font-semibold leading-6 text-gray-900'>
-            <Button className='bg-orange-500'>Sign Up</Button>
+            <Button
+              className='bg-orange-500 hover:bg-orange-600'
+              onClick={() => {
+                navigate('/signup')
+              }}
+            >
+              Sign Up
+            </Button>
           </NavLink>
         </div>
       </nav>

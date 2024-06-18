@@ -103,7 +103,7 @@ function Detail() {
             </TabsList>
             <TabsContent value='showtime'>
               <Tabs defaultValue={activeTab} orientation='vertical' className='w-full'>
-                <TabsList className='bg-white'>
+                <TabsList className='bg-white w-60'>
                   {film?.content?.heThongRapChieu.map(cinemas => (
                     <MotionTabsTrigger
                       layoutId={cinemas.maHeThongRap}
@@ -132,7 +132,7 @@ function Detail() {
                         <div className='flex items-center'>
                           <img className='rounded-full w-14' src={cinema.hinhAnh} alt={cinema.tenCumRap} />
                           <div className='pl-6'>
-                            <p>{cinema.tenCumRap}</p>
+                            <p className='text-rose-700'>{cinema.tenCumRap}</p>
                             <p className='text-xs text-slate-400'>{cinema.diaChi}</p>
                             <div className='grid grid-cols-4 mt-2'>
                               {cinema.lichChieuPhim.slice(0, 12).map(showtime => (

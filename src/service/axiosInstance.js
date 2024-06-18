@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { DOMAIN_API, TOKEN } from '../utils/settingSystems'
+import { DOMAIN_API, TOKEN } from '@/utils/config'
 
 const axiosInstance = axios.create({
   baseURL: DOMAIN_API,
@@ -20,12 +20,7 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   response => ({ data: response.data }),
-  error => ({
-    error: {
-      status: error.response?.status,
-      data: error.response?.data || error.message
-    }
-  })
+  error => Promise.reject(error)
 )
 
 export default axiosInstance

@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useGetCinemaShowtimeInfoQuery } from '@/redux/api/cinema.service'
-import { GROUP_ID } from '@/utils/settingSystems'
+import { GROUP_ID } from '@/utils/config'
 
 const MotionTabsTrigger = motion(TabsTrigger)
 
