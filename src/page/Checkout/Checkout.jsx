@@ -2,6 +2,7 @@ import { CheckIcon } from '@radix-ui/react-icons'
 import _ from 'lodash'
 import { X } from 'lucide-react'
 import moment from 'moment'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import styled, { css } from 'styled-components'
@@ -79,6 +80,10 @@ function Checkout() {
   const normalSeats = tickets.filter(seat => seat.loaiGhe === 'Thuong')
   const vipSeats = tickets.filter(seat => seat.loaiGhe === 'Vip')
 
+  useEffect(() => {
+    dispatch(resetTickets())
+  }, [id, dispatch])
+
   const renderSeats = () => (
     <div className='grid grid-cols-16'>
       {movieTicket?.danhSachGhe.map(seat => {
@@ -109,9 +114,7 @@ function Checkout() {
             key={seat.maGhe}
             type={type}
             disabled={seat.daDat || type === 'bookingByOthers'}
-            onClick={() => {
-              dispatch(setTicketsBooking(seat))
-            }}
+            onClick={() => dispatch(setTicketsBooking(seat))}
           >
             {seat.daDat || type === 'bookingByOthers' ? <X size={20} className='mx-auto' /> : seat.tenGhe}
           </Seat>
