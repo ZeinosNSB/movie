@@ -16,13 +16,13 @@ function TabsHome() {
   const { data: cinemaShowtimeInfo } = useGetCinemaShowtimeInfoQuery({ maNhom: GROUP_ID })
 
   useEffect(() => {
-    cinemaShowtimeInfo && setActiveTab(cinemaShowtimeInfo.content[0].maHeThongRap)
+    cinemaShowtimeInfo && setActiveTab(cinemaShowtimeInfo[0].maHeThongRap)
   }, [cinemaShowtimeInfo])
 
   return (
     <Tabs defaultValue={activeTab} className='w-full max-w-7xl m-auto sm:px-6 lg:px-10 py-6' orientation='vertical'>
       <TabsList className='bg-white'>
-        {cinemaShowtimeInfo?.content.map(cinemas => (
+        {cinemaShowtimeInfo?.map(cinemas => (
           <MotionTabsTrigger
             layoutId={cinemas.maHeThongRap}
             value={cinemas.maHeThongRap}
@@ -41,7 +41,7 @@ function TabsHome() {
           </MotionTabsTrigger>
         ))}
       </TabsList>
-      {cinemaShowtimeInfo?.content.map(cinemas => (
+      {cinemaShowtimeInfo?.map(cinemas => (
         <TabsContent value={cinemas.maHeThongRap} key={cinemas.maHeThongRap}>
           <Tabs
             defaultValue={cinemas?.lstCumRap[0]?.maCumRap}

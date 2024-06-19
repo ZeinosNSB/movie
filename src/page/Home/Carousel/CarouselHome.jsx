@@ -21,7 +21,7 @@ function CarouselHome() {
   return (
     <Carousel opts={{ loop: true }} plugins={[autoplay.current, fade.current]} className='w-full m-auto'>
       <CarouselContent>
-        {banners?.content.map(banner => (
+        {banners?.map(banner => (
           <CarouselItem key={banner.maBanner}>
             <div
               className='bg-no-repeat bg-cover bg-center w-full h-[700px]'

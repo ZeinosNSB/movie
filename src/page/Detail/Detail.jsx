@@ -13,20 +13,20 @@ const MotionTabsTrigger = motion(TabsTrigger)
 function Detail() {
   const [activeTab, setActiveTab] = useState(null)
   const { id } = useParams()
-  const { data: film } = useGetFilmInfoQuery({ maPhim: id })
+  const { data: film } = useGetFilmInfoQuery(id)
 
   useEffect(() => {
-    film && setActiveTab(film.content.heThongRapChieu[0]?.maHeThongRap)
+    film && setActiveTab(film.heThongRapChieu[0]?.maHeThongRap)
   }, [film])
 
   return (
-    <div className='bg-cover bg-no-repeat' style={{ backgroundImage: `url(${film?.content?.hinhAnh})` }}>
+    <div className='bg-cover bg-no-repeat' style={{ backgroundImage: `url(${film?.hinhAnh})` }}>
       <div className='backdrop-blur-xl min-h-screen pt-52'>
         <div className='max-w-7xl w-full mx-auto grid grid-cols-12 gap-8 z-10 px-6'>
           <div className='col-span-4 mx-auto'>
             <img
               className='rounded-2xl h-96 aspect-video object-cover bg-cover bg-no-repeat'
-              src={film?.content?.hinhAnh}
+              src={film?.hinhAnh}
               alt='Film'
               onError={event => {
                 event.target.onerror = null
@@ -36,17 +36,17 @@ function Detail() {
           </div>
           <div className='col-span-5 w-full mx-auto flex justify-center flex-col'>
             <p className='text-lg text-white mb-3'>
-              Ngày khởi chiếu: {moment(film?.content?.ngayKhoiChieu).format('DD-MM-YYYY')}
+              Ngày khởi chiếu: {moment(film?.ngayKhoiChieu).format('DD-MM-YYYY')}
             </p>
-            <h1 className='text-3xl font-bold text-white mb-3'>{film?.content?.tenPhim}</h1>
+            <h1 className='text-3xl font-bold text-white mb-3'>{film?.tenPhim}</h1>
             <div className='text-slate-200'>
               <p className='text-lg'>Mô tả:</p>
-              <p>{film?.content?.moTa}</p>
+              <p>{film?.moTa}</p>
             </div>
           </div>
           <div className='col-span-3 relative w-32 aspect-square m-auto'>
             <Rating
-              rating={film?.content?.danhGia / 2}
+              rating={film?.danhGia / 2}
               totalStars={5}
               size={24}
               variant='yellow'
@@ -64,7 +64,7 @@ function Detail() {
                 fill='transparent'
               />
               <circle
-                className={`${film?.content?.danhGia >= 8 ? 'text-green-600' : 'text-orange-600'} stroke-current`}
+                className={`${film?.danhGia >= 8 ? 'text-green-600' : 'text-orange-600'} stroke-current`}
                 strokeWidth='10'
                 strokeLinecap='round'
                 cx='50'
@@ -72,7 +72,7 @@ function Detail() {
                 r='40'
                 fill='transparent'
                 strokeDasharray='251.2'
-                strokeDashoffset={`calc(251.2 - (251.2 * ${film?.content?.danhGia}) / 10)`}
+                strokeDashoffset={`calc(251.2 - (251.2 * ${film?.danhGia}) / 10)`}
                 style={{
                   transition: 'stroke-dashoffset 0.5s',
                   transform: 'rotate(-90deg)',
@@ -88,7 +88,7 @@ function Detail() {
                 fontWeight='bold'
                 className='font-bold'
               >
-                {film?.content?.danhGia}
+                {film?.danhGia}
               </text>
             </svg>
           </div>
@@ -104,7 +104,7 @@ function Detail() {
             <TabsContent value='showtime'>
               <Tabs defaultValue={activeTab} orientation='vertical' className='w-full'>
                 <TabsList className='bg-white w-60'>
-                  {film?.content?.heThongRapChieu.map(cinemas => (
+                  {film?.heThongRapChieu.map(cinemas => (
                     <MotionTabsTrigger
                       layoutId={cinemas.maHeThongRap}
                       value={cinemas.maHeThongRap}
@@ -125,7 +125,7 @@ function Detail() {
                     </MotionTabsTrigger>
                   ))}
                 </TabsList>
-                {film?.content?.heThongRapChieu.map(cinemas => (
+                {film?.heThongRapChieu.map(cinemas => (
                   <TabsContent value={cinemas.maHeThongRap} key={cinemas.maHeThongRap} className='w-[1000px]'>
                     {cinemas.cumRapChieu.map(cinema => (
                       <div key={cinema.maCumRap} className='border-b-2 rounded-b-2xl pl-4 py-3'>
@@ -136,7 +136,7 @@ function Detail() {
                             <p className='text-xs text-slate-400'>{cinema.diaChi}</p>
                             <div className='grid grid-cols-4 mt-2'>
                               {cinema.lichChieuPhim.slice(0, 12).map(showtime => (
-                                <NavLink to='/' key={showtime.maLichChieu}>
+                                <NavLink to={`/checkout/${showtime.maLichChieu}`} key={showtime.maLichChieu}>
                                   <Badge className='justify-center hover:bg-slate-200' variant='outline'>
                                     {moment(showtime.ngayChieuGioChieu).format('hh:mm A')}
                                   </Badge>

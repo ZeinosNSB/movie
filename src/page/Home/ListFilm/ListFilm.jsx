@@ -28,8 +28,8 @@ function ListFilm() {
       <TabsContent value='on'>
         <Carousel opts={{ loop: true }}>
           <CarouselContent>
-            {listFilm?.content
-              .filter(film => film.dangChieu)
+            {listFilm
+              ?.filter(film => film.dangChieu)
               .map(film => (
                 <CarouselItem key={film.maPhim} className='xs:basis-1 md:basis-1/2 lg:basis-1/3'>
                   <CardFilm film={film} />
@@ -43,8 +43,8 @@ function ListFilm() {
       <TabsContent value='off'>
         <Carousel opts={{ loop: true }}>
           <CarouselContent>
-            {listFilm?.content
-              .filter(film => film.sapChieu)
+            {listFilm
+              ?.filter(film => film.sapChieu)
               .map(film => (
                 <CarouselItem key={film.maPhim} className='xs:basis-1 md:basis-1/2 lg:basis-1/3'>
                   <CardFilm film={film} />

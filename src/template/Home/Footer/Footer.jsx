@@ -38,7 +38,7 @@ function Footer() {
             <div className='block xl:py-16 col-span-full min-[500px]:col-span-6 md:col-span-4 xl:col-span-3 mx-auto'>
               <h4 className='text-lg text-white font-bold mb-9 text-center xl:text-left'>Partners</h4>
               <div className='grid grid-cols-2 text-sm gap-6 xl:gap-12 max-xl:justify-center'>
-                {listCinema?.content.map(cinema => (
+                {listCinema?.map(cinema => (
                   <img
                     className='h-10 cursor-pointer'
                     key={cinema.maHeThongRap}

@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 
 import { USER_LOGIN } from '@/utils/config'
 
@@ -7,7 +7,7 @@ function CheckoutTemplate() {
 
   !localStorage.getItem(USER_LOGIN) && navigate('/signin')
 
-  return <div></div>
+  return <Outlet />
 }
 
 export default CheckoutTemplate

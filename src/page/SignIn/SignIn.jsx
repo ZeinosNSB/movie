@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
@@ -7,10 +8,12 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useSignInMutation } from '@/redux/api/user.service'
+import { setUser } from '@/redux/reducer/user.slice'
 import { TOKEN, USER_LOGIN } from '@/utils/config'
 import { signinSchema } from '@/validation'
 
 function SignIn() {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const [signIn] = useSignInMutation()
@@ -26,9 +29,11 @@ function SignIn() {
   const onSubmit = async values => {
     try {
       const result = await signIn(values).unwrap()
-      if (result?.content?.accessToken) {
-        localStorage.setItem(TOKEN, result?.content?.accessToken)
-        localStorage.setItem(USER_LOGIN, JSON.stringify(result?.content))
+      console.log(values)
+      if (result?.accessToken) {
+        localStorage.setItem(TOKEN, result?.accessToken)
+        localStorage.setItem(USER_LOGIN, JSON.stringify(result))
+        dispatch(setUser(result))
         navigate('/')
       }
     } catch (error) {

@@ -14,7 +14,7 @@ const axiosBaseQuery =
         params,
         body
       })
-      return { data: result.data }
+      return { data: result.data?.content }
     } catch (axiosError) {
       const err = axiosError
       return {

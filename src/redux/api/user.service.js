@@ -12,8 +12,14 @@ export const userApi = createApi({
         method: 'POST',
         data: body
       })
+    }),
+    getUserInfo: build.mutation({
+      query: () => ({
+        url: 'QuanLyNguoiDung/ThongTinTaiKhoan',
+        method: 'POST'
+      })
     })
   })
 })
 
-export const { useSignInMutation } = userApi
+export const { useSignInMutation, useGetUserInfoMutation } = userApi

@@ -16,7 +16,7 @@ export const cinemaApi = createApi({
       })
     }),
     getFilmInfo: build.query({
-      query: ({ maPhim }) => ({
+      query: maPhim => ({
         url: 'QuanLyRap/LayThongTinLichChieuPhim',
         params: { maPhim }
       })
