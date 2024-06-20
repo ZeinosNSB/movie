@@ -379,7 +379,7 @@ function OrderHisTory() {
   )
 }
 
-export default () => {
+export default function TabsCheckout() {
   const dispatch = useDispatch()
 
   const navigate = useNavigate()

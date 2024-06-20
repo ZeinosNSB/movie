@@ -39,6 +39,10 @@ function AdminTemplate() {
 
   const currentPath = location.pathname.split('/').pop()
 
+  if (user?.maLoaiNguoiDung !== 'QuanTri') {
+    navigate('/home')
+  }
+
   useEffect(() => {
     setSelected(currentPath)
   }, [currentPath])

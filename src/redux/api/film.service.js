@@ -14,8 +14,14 @@ export const filmApi = createApi({
         url: 'QuanLyPhim/LayDanhSachPhim',
         params: { maNhom, tenPhim }
       })
+    }),
+    getFilmListByPagination: build.query({
+      query: ({ maNhom, soTrang, soPhanTuTrenTrang, tenPhim }) => ({
+        url: 'QuanLyPhim/LayDanhSachPhimPhanTrang',
+        params: { maNhom, soTrang, soPhanTuTrenTrang, tenPhim }
+      })
     })
   })
 })
 
-export const { useGetBannerFilmQuery, useGetFilmListQuery } = filmApi
+export const { useGetBannerFilmQuery, useGetFilmListQuery, useGetFilmListByPaginationQuery } = filmApi
