@@ -1,6 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 
-import Dashboard from '@/page/Admin/Dashboard'
+import { Toaster } from '@/components/ui/sonner'
 import Films from '@/page/Admin/Films'
 import Showtime from '@/page/Admin/Showtime'
 import User from '@/page/Admin/User'
@@ -37,13 +37,13 @@ function App() {
           <Route path='signup' element={<SignUp />} />
         </Route>
         <Route path='admin' element={<AdminTemplate />}>
-          <Route path='dashboard' element={<Dashboard />} />
           <Route path='users' element={<User />} />
           <Route path='films' element={<Films />} />
           <Route path='showtime' element={<Showtime />} />
         </Route>
         <Route path='*' element={<h1>Ronaldo</h1>} />
       </Routes>
+      <Toaster />
     </BrowserRouter>
   )
 }

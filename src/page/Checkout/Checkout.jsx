@@ -409,7 +409,7 @@ export default () => {
         </TabsTrigger>
         <TabsTrigger
           className='p-2 text-base rounded-2xl text-slate-900 hover:bg-neutral-300 border-2 border-amber-200 hover:border-neutral-300 data-[state=active]:bg-slate-900 data-[state=active]:text-orange-300 data-[state=active]:border-slate-900'
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/home')}
         >
           <HomeIcon />
         </TabsTrigger>

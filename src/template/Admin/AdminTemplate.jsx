@@ -1,7 +1,9 @@
-import { CircleArrowRight, Clock, Film, Package2, PanelLeft, Search, Settings, Users2 } from 'lucide-react'
-import { useMemo, useState } from 'react'
-import { Link, NavLink, Outlet } from 'react-router-dom'
+import { AnimatePresence, motion } from 'framer-motion'
+import { CircleArrowRight, Clock, Film, Package2, PanelLeft, Settings, Users2 } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 
+import logo from '@/assets/logo/cybersoft.png'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
   Breadcrumb,
@@ -20,47 +22,67 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { Input } from '@/components/ui/input'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { TOKEN, USER_LOGIN } from '@/utils/config'
 
 const tabs = [
-  { name: 'Users', path: 'users', icon: Users2 },
-  { name: 'Films', path: 'films', icon: Film },
-  { name: 'Showtime', path: 'showtime', icon: Clock }
+  { name: 'Users', path: 'users', icon: <Users2 className='h-5 w-5' /> },
+  { name: 'Films', path: 'films', icon: <Film className='h-5 w-5' /> },
+  { name: 'Showtime', path: 'showtime', icon: <Clock className='h-5 w-5' /> }
 ]
 
 function AdminTemplate() {
-  const user = useMemo(() => JSON.parse(localStorage.getItem(USER_LOGIN)), [])
   const [selected, setSelected] = useState(tabs[0].path)
+  const navigate = useNavigate()
+  const user = useMemo(() => JSON.parse(localStorage.getItem(USER_LOGIN)), [])
+
+  const currentPath = location.pathname.split('/').pop()
+
+  useEffect(() => {
+    setSelected(currentPath)
+  }, [currentPath])
 
   return (
     <div className='flex min-h-screen w-full flex-col bg-muted/40'>
-      <aside className='fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex'>
+      <aside className='fixed inset-y-0 left-0 z-10 hidden w-20 flex-col border-r bg-background sm:flex'>
         <nav className='flex flex-col items-center gap-4 px-2 py-4'>
           <Link
             to='/home'
-            className='group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base'
+            className='group flex h-11 w-11 shrink-0 items-center justify-center gap-2 rounded-full text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base mb-4'
           >
-            <Package2 className='h-4 w-4 transition-all group-hover:scale-110 ' />
+            <img src={logo} alt='Logo' className='h-11 transition-all group-hover:scale-110' />
             <span className='sr-only'>CyberSoft</span>
           </Link>
           {tabs.map(tab => (
             <TooltipProvider key={tab.path}>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Link
-                    to={`/admin/${tab.path}`}
-                    className='flex h-9 w-9 items-center justify-center rounded-lg transition-colors hover:text-foreground md:h-8 md:w-8'
-                    onClick={() => setSelected(tab.path)}
-                  >
-                    <tab.icon className='h-5 w-5' />
-                    <span className='sr-only'>{tab.name}</span>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent side='right'>{tab}</TooltipContent>
-              </Tooltip>
+              <motion.div whileHover={{ scale: 1.15 }} whileTap={{ scale: 0.85 }}>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Link
+                      to={`/admin/${tab.path}`}
+                      className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors md:h-8 md:w-8 ${
+                        selected === tab.path ? 'bg-primary text-primary-foreground' : ''
+                      }`}
+                      onClick={() => setSelected(tab.path)}
+                    >
+                      {tab.icon}
+                      <span className='sr-only'>{tab.name}</span>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side='right'>{tab.name}</TooltipContent>
+                </Tooltip>
+                <AnimatePresence>
+                  {selected === tab.path && (
+                    <motion.span
+                      className='bg-primary text-primary-foreground'
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      exit={{ scale: 0 }}
+                    ></motion.span>
+                  )}
+                </AnimatePresence>
+              </motion.div>
             </TooltipProvider>
           ))}
         </nav>
@@ -81,7 +103,7 @@ function AdminTemplate() {
           </TooltipProvider>
         </nav>
       </aside>
-      <div className='flex flex-col sm:gap-4 sm:py-4 sm:pl-14'>
+      <div className='flex flex-col sm:gap-4 sm:py-4 sm:pl-20'>
         <header className='sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6'>
           <Sheet>
             <SheetTrigger asChild>
@@ -103,12 +125,12 @@ function AdminTemplate() {
                   <Link
                     to={`/admin/${tab.path}`}
                     key={tab.path}
-                    className={`flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground ${
-                      selected === tab.path ? 'text-foreground' : ''
+                    className={`flex items-center gap-4 py-1 px-2.5 text-muted-foreground ${
+                      selected === tab.path ? 'text-foreground bg-primary rounded-full text-slate-100' : ''
                     }`}
                     onClick={() => setSelected(tab.path)}
                   >
-                    <tab.icon className='h-5 w-5' />
+                    {tab.icon}
                     {tab.name}
                   </Link>
                 ))}
@@ -119,29 +141,16 @@ function AdminTemplate() {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <Link to='#'>Dashboard</Link>
+                  <Link to='/admin'>Admin</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link to='#'>Products</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>All Products</BreadcrumbPage>
+                <BreadcrumbPage>{tabs.find(tab => tab.path === selected)?.name}</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <div className='relative ml-auto flex-1 md:grow-0'>
-            <Search className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground' />
-            <Input
-              type='search'
-              placeholder='Search...'
-              className='w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]'
-            />
-          </div>
+          <div className='relative ml-auto flex-1 md:grow-0' />
           <DropdownMenu>
             <DropdownMenuTrigger className='cursor-pointer outline-none'>
               <Avatar>
