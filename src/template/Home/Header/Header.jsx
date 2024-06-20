@@ -1,36 +1,52 @@
-import { motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { motion, useMotionValueEvent, useScroll } from 'framer-motion'
+import { CircleArrowRight } from 'lucide-react'
+import { useMemo, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
+import { TOKEN, USER_LOGIN } from '@/utils/config'
 
 const tabs = ['Home', 'News', 'Contact']
 
 const Header = () => {
-  const [isScrolled, setIsScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
 
   const navigate = useNavigate()
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 250) {
-        setIsScrolled(true)
-      } else {
-        setIsScrolled(false)
-      }
-    }
+  const { scrollY } = useScroll()
 
-    window.addEventListener('scroll', handleScroll)
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
+  useMotionValueEvent(scrollY, 'change', latestScrollY => {
+    const previousScrollY = scrollY.getPrevious()
+
+    if (latestScrollY > previousScrollY && latestScrollY > 200) {
+      setHidden(true)
+    } else {
+      setHidden(false)
     }
-  }, [])
+  })
+
+  const user = useMemo(() => JSON.parse(localStorage.getItem(USER_LOGIN)), [])
 
   return (
-    <header
-      className={`fixed z-10 w-full ${isScrolled ? 'bg-gray-800' : 'bg-transparent'} transition-colors duration-200 ease-in`}
+    <motion.header
+      variants={{
+        visible: { y: 0 },
+        hidden: { y: '-100%' }
+      }}
+      animate={hidden ? 'hidden' : 'visible'}
+      transition={{ duration: 0.4, ease: 'easeInOut' }}
+      className={`sticky top-0 z-30 flex h-14 items-center gap-4 px-4 sm:h-auto sm:border-0 sm:px-6 w-full bg-gray-800 transition-colors duration-200 ease-in`}
     >
-      <nav className='mx-auto w-full flex max-w-7xl items-center justify-between p-6 lg:px-8'>
+      <nav className='mx-auto w-full flex max-w-7xl items-center justify-between p-4'>
         <div className='flex lg:flex-1'>
           <NavLink to='/' className='-m-1.5 p-1.5'>
             <span className='sr-only'>Your Company</span>
@@ -68,29 +84,64 @@ const Header = () => {
           ))}
         </div>
         <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
-          <NavLink to='/signin' className='font-semibold leading-6 text-gray-900'>
-            <Button
-              variant='outline'
-              onClick={() => {
-                navigate('/signin')
-              }}
-            >
-              Sign In
-            </Button>
-          </NavLink>
-          <NavLink to='/signup' className='pl-2 font-semibold leading-6 text-gray-900'>
-            <Button
-              className='bg-orange-500 hover:bg-orange-600'
-              onClick={() => {
-                navigate('/signup')
-              }}
-            >
-              Sign Up
-            </Button>
-          </NavLink>
+          {!user && (
+            <>
+              <NavLink to='/signin' className='font-semibold leading-6 text-gray-900'>
+                <Button
+                  variant='outline'
+                  onClick={() => {
+                    navigate('/signin')
+                  }}
+                >
+                  Sign In
+                </Button>
+              </NavLink>
+              <NavLink to='/signup' className='pl-2 font-semibold leading-6 text-gray-900'>
+                <Button
+                  className='bg-orange-500 hover:bg-orange-600'
+                  onClick={() => {
+                    navigate('/signup')
+                  }}
+                >
+                  Sign Up
+                </Button>
+              </NavLink>
+            </>
+          )}
+          {user && (
+            <DropdownMenu>
+              <DropdownMenuTrigger className='cursor-pointer outline-none'>
+                <Avatar>
+                  <AvatarFallback>{user.hoTen.substring(0, 2)}</AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align='end' className='mt-2 cursor-pointer'>
+                <DropdownMenuLabel>Hello, {user.hoTen}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className='cursor-pointer'>
+                  <NavLink to='/profile' className='flex items-center gap-2'>
+                    <span>Profile</span>
+                  </NavLink>
+                </DropdownMenuItem>
+                <DropdownMenuItem className='cursor-pointer'>Support</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className='cursor-pointer text-red-800'
+                  onClick={() => {
+                    localStorage.removeItem(USER_LOGIN)
+                    localStorage.removeItem(TOKEN)
+                    navigate('/')
+                    window.location.reload()
+                  }}
+                >
+                  Logout <CircleArrowRight size={20} className='ml-2' />
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </nav>
-    </header>
+    </motion.header>
   )
 }
 

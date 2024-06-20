@@ -90,7 +90,7 @@ function TabsHome() {
                         <p className='text-sm text-slate-400'>{cinema.diaChi}</p>
                         <div className='grid grid-cols-6 gap-2 text-nowrap text-sm text-center mt-4'>
                           {film.lstLichChieuTheoPhim.slice(0, 12).map(showtime => (
-                            <NavLink to='/' key={showtime.maLichChieu}>
+                            <NavLink to={`/checkout/${showtime.maLichChieu}`} key={showtime.maLichChieu}>
                               <Badge className='justify-center hover:bg-slate-200' variant='outline'>
                                 {moment(showtime.ngayChieuGioChieu).format('hh:mm A')}
                               </Badge>

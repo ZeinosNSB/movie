@@ -1,10 +1,10 @@
 import { CheckIcon } from '@radix-ui/react-icons'
 import _ from 'lodash'
-import { X } from 'lucide-react'
+import { HomeIcon, X } from 'lucide-react'
 import moment from 'moment'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
 import screen from '@/assets/img/screen.png'
@@ -381,6 +381,9 @@ function OrderHisTory() {
 
 export default () => {
   const dispatch = useDispatch()
+
+  const navigate = useNavigate()
+
   const [GetUserInfo] = useGetUserInfoMutation()
 
   const onTabs = async () => {
@@ -390,7 +393,7 @@ export default () => {
 
   return (
     <Tabs defaultValue='on' className='w-full max-w-7xl mx-auto'>
-      <TabsList className='w-[500px] mx-auto grid grid-cols-2 ml-14 mt-7 bg-white gap-4'>
+      <TabsList className='w-[500px] mx-auto grid grid-cols-3 ml-14 mt-7 bg-white gap-4 mb-5'>
         <TabsTrigger
           value='on'
           className='p-2 text-base rounded-2xl text-slate-900 hover:bg-neutral-300 border-2 border-amber-200 hover:border-neutral-300 data-[state=active]:bg-slate-900 data-[state=active]:text-orange-300 data-[state=active]:border-slate-900'
@@ -403,6 +406,12 @@ export default () => {
           onClick={onTabs}
         >
           Order History
+        </TabsTrigger>
+        <TabsTrigger
+          className='p-2 text-base rounded-2xl text-slate-900 hover:bg-neutral-300 border-2 border-amber-200 hover:border-neutral-300 data-[state=active]:bg-slate-900 data-[state=active]:text-orange-300 data-[state=active]:border-slate-900'
+          onClick={() => navigate('/')}
+        >
+          <HomeIcon />
         </TabsTrigger>
       </TabsList>
       <TabsContent value='on'>

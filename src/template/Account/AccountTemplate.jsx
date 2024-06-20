@@ -1,8 +1,13 @@
+import { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 
 import banner from '@/assets/img/banner.jpg'
 
 function AccountTemplate() {
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  })
+
   return (
     <div className='w-full h-screen lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]'>
       <Outlet />
