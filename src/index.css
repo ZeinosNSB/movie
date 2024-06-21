@@ -75,3 +75,7 @@
         @apply bg-background text-foreground;
     }
 }
+
+input[type="file"]::file-selector-button {
+    @apply text-white bg-primary hover:bg-primary/90 font-medium text-sm cursor-pointer border-0 py-[7px] rounded-sm;
+}

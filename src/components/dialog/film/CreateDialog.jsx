@@ -1,10 +1,12 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { ReloadIcon } from '@radix-ui/react-icons'
-import { format } from 'date-fns'
-import { Calendar, CalendarIcon, PlusCircle } from 'lucide-react'
+import { CalendarIcon, PlusCircle } from 'lucide-react'
+import moment from 'moment'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Button } from '@/components/ui/button'
+import { Calendar } from '@/components/ui/calendar'
 import {
   Dialog,
   DialogClose,
@@ -18,12 +20,15 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { Switch } from '@/components/ui/switch'
+import { addFilmSchema } from '@/validation'
 
 export function CreateDialog() {
   const [open, setOpen] = useState(false)
+  const [imgSrc, setImgSrc] = useState(null)
 
   const form = useForm({
-    // resolver: zodResolver(createTaskSchema)
+    resolver: zodResolver(addFilmSchema),
     defaultValues: {
       tenPhim: '',
       trailer: '',
@@ -33,9 +38,27 @@ export function CreateDialog() {
       sapChieu: false,
       hot: false,
       danhGia: 0,
-      hinhAnh: {}
+      hinhAnh: ''
     }
   })
+
+  const handleChangeFile = e => {
+    //Lấy file ra từ e
+    let file = e.target.files[0]
+    if (
+      file.type === 'image/jpeg' ||
+      file.type === 'image/jpg' ||
+      file.type === 'image/gif' ||
+      file.type === 'image/png'
+    ) {
+      let reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = e => {
+        setImgSrc(e.target.result) //base64 image
+      }
+      form.setValue('hinhAnh', file)
+    }
+  }
 
   // function onSubmit(input) {
   //   startCreateTransition(async () => {
@@ -53,6 +76,7 @@ export function CreateDialog() {
   // }
 
   const onSubmit = values => {
+    values.ngayKhoiChieu = moment(values.ngayKhoiChieu).format('DD/MM/YYYY')
     console.log(values)
   }
 
@@ -121,9 +145,9 @@ export function CreateDialog() {
                       <FormControl>
                         <Button
                           variant={'outline'}
-                          className={`w-[240px] pl-3 text-left font-normal ${!field.value && 'text-muted-foreground'}`}
+                          className={`w-64 pl-3 text-left font-normal ${!field.value && 'text-muted-foreground'}`}
                         >
-                          {field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}
+                          {field.value ? moment(field.value).format('DD/MM/YYYY') : <span>Pick a date</span>}
                           <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
                         </Button>
                       </FormControl>
@@ -133,10 +157,85 @@ export function CreateDialog() {
                         mode='single'
                         selected={field.value}
                         onSelect={field.onChange}
-                        disabled={date => date > new Date() || date < new Date('1900-01-01')}
+                        disabled={date => date < new Date('1900-01-01')}
+                        initialFocus
                       />
                     </PopoverContent>
                   </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='dangChieu'
+              render={({ field }) => (
+                <FormItem className='flex flex-col'>
+                  <FormLabel>Now Showing</FormLabel>
+                  <FormControl>
+                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='sapChieu'
+              render={({ field }) => (
+                <FormItem className='flex flex-col'>
+                  <FormLabel>Coming Soon</FormLabel>
+                  <FormControl>
+                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='hot'
+              render={({ field }) => (
+                <FormItem className='flex flex-col'>
+                  <FormLabel>Hot Trending</FormLabel>
+                  <FormControl>
+                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='danhGia'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Rating</FormLabel>
+                  <FormControl>
+                    <Input className='w-64' min={0} max={10} type='number' placeholder='Rating' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name='hinhAnh'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Image</FormLabel>
+                  <FormControl>
+                    <>
+                      <Input
+                        {...field}
+                        className='w-64 hover:bg-accent p-0 cursor-pointer'
+                        type='file'
+                        accept='image/png, image/jpeg,image/gif,image/png'
+                        onChange={handleChangeFile}
+                      />
+                      {imgSrc && <img src={imgSrc} alt='preview' className='w-16 h-20 rounded-xl mt-2' />}
+                    </>
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}

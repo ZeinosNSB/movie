@@ -18,7 +18,7 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
         nav: 'space-x-1 flex items-center',
         nav_button: cn(
           buttonVariants({ variant: 'outline' }),
-          'h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100'
+          'size-7 bg-transparent p-0 opacity-50 hover:opacity-100'
         ),
         nav_button_previous: 'absolute left-1',
         nav_button_next: 'absolute right-1',
@@ -32,7 +32,7 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
             ? '[&:has(>.day-range-end)]:rounded-r-md [&:has(>.day-range-start)]:rounded-l-md first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md'
             : '[&:has([aria-selected])]:rounded-md'
         ),
-        day: cn(buttonVariants({ variant: 'ghost' }), 'h-8 w-8 p-0 font-normal aria-selected:opacity-100'),
+        day: cn(buttonVariants({ variant: 'ghost' }), 'size-8 p-0 font-normal aria-selected:opacity-100'),
         day_range_start: 'day-range-start',
         day_range_end: 'day-range-end',
         day_selected:
@@ -46,8 +46,8 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
         ...classNames
       }}
       components={{
-        IconLeft: ({ ...props }) => <ChevronLeftIcon className='h-4 w-4' />,
-        IconRight: ({ ...props }) => <ChevronRightIcon className='h-4 w-4' />
+        IconLeft: ({ ...props }) => <ChevronLeftIcon className='size-4' />,
+        IconRight: ({ ...props }) => <ChevronRightIcon className='size-4' />
       }}
       {...props}
     />
