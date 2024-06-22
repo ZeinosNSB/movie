@@ -6,5 +6,6 @@ export const FilmSchema = z.object({
   moTa: z.string(),
   dangChieu: z.boolean(),
   sapChieu: z.boolean(),
-  hot: z.boolean()
+  hot: z.boolean(),
+  danhGia: z.string()
 })

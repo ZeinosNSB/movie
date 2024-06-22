@@ -35,7 +35,17 @@ export function UpdateFilm({ ids, film, onOpenChange, ...props }) {
   const [updateFilm, { isLoading }] = useUpdateFilmMutation()
 
   const form = useForm({
-    resolver: zodResolver(FilmSchema)
+    resolver: zodResolver(FilmSchema),
+    defaultValues: {
+      maPhim: filmInfo?.maPhim,
+      tenPhim: filmInfo?.tenPhim,
+      trailer: filmInfo?.trailer,
+      moTa: filmInfo?.moTa,
+      ngayKhoiChieu: filmInfo?.ngayKhoiChieu,
+      dangChieu: filmInfo?.dangChieu,
+      sapChieu: filmInfo?.sapChieu,
+      hot: filmInfo?.hot
+    }
   })
 
   useEffect(() => {
@@ -51,9 +61,8 @@ export function UpdateFilm({ ids, film, onOpenChange, ...props }) {
     setImgSrc(filmInfo?.hinhAnh)
   }, [filmInfo, form])
 
-  const handleChangeFile = async e => {
+  const handleChangeFile = e => {
     let file = e.target.files[0]
-    await setImage(file)
 
     if (
       file.type === 'image/jpeg' ||
@@ -64,6 +73,8 @@ export function UpdateFilm({ ids, film, onOpenChange, ...props }) {
       let reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = () => setImgSrc(reader.result) //Hình base 64
+
+      setImage(file)
     }
   }
 
@@ -71,6 +82,9 @@ export function UpdateFilm({ ids, film, onOpenChange, ...props }) {
     values.ngayKhoiChieu = moment(values.ngayKhoiChieu).format('DD/MM/YYYY')
     values.maNhom = GROUP_ID
     values.hinhAnh = image
+    values.maPhim = ids.maPhim
+
+    console.log('values', values)
 
     let formData = new FormData()
     for (let key in values) {
@@ -84,13 +98,15 @@ export function UpdateFilm({ ids, film, onOpenChange, ...props }) {
     }
 
     try {
-      await updateFilm(formData)
+      console.log('danhGia', formData.get('danhGia'))
+      await updateFilm(formData).unwrap()
       setImgSrc(null)
-      // onOpenChange(false)
+      onOpenChange(false)
       form.reset()
       await toast.success('Film update successfully')
     } catch (error) {
-      console.error('Error submitting form:', error)
+      const err = error?.data?.content
+      toast.error(err)
     }
   }
 

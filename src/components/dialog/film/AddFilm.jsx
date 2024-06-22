@@ -79,7 +79,7 @@ export function AddFilm() {
     }
 
     try {
-      await addFilm(formData)
+      await addFilm(formData).unwrap()
       setImgSrc(null)
       setOpen(false)
       form.reset()
