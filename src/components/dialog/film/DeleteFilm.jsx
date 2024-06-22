@@ -17,6 +17,16 @@ import { useDeleteFilmMutation } from '@/redux/api/film.service'
 export function DeleteFilm({ film, showTrigger = true, ...props }) {
   const [deleteFilm, { isLoading }] = useDeleteFilmMutation()
 
+  const handleDeleteFilm = async () => {
+    try {
+      await deleteFilm(film.maPhim).unwrap()
+      toast.success('User deleted successfully')
+    } catch (error) {
+      const err = error?.data?.content
+      toast.error(err)
+    }
+  }
+
   return (
     <Dialog {...props}>
       {showTrigger ? (
@@ -38,14 +48,7 @@ export function DeleteFilm({ film, showTrigger = true, ...props }) {
           <DialogClose asChild>
             <Button variant='outline'>Cancel</Button>
           </DialogClose>
-          <Button
-            aria-label='Delete selected rows'
-            variant='destructive'
-            onClick={async () => {
-              await deleteFilm(film?.maPhim)
-              toast.success('Film deleted successfully.')
-            }}
-          >
+          <Button aria-label='Delete selected rows' variant='destructive' onClick={() => handleDeleteFilm()}>
             {isLoading && <ReloadIcon className='mr-2 size-4 animate-spin' aria-hidden='true' />}
             Delete
           </Button>
