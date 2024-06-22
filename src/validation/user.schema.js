@@ -16,7 +16,7 @@ export const userSchema = z
     soDt: z.string().min(10, {
       message: 'Phone number must be at least 10 digits.'
     }),
-    maNhom: z.string().default('GP01'),
+    maNhom: z.string(),
     maLoaiNguoiDung: z.string().default('KhachHang')
   })
   .refine(value => value.matKhau === value.matKhauXacNhan, {
