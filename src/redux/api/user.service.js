@@ -32,7 +32,10 @@ export const userApi = createApi({
         url: 'QuanLyNguoiDung/LayDanhSachNguoiDungPhanTrang',
         params: { MaNhom, tuKhoa, soTrang, soPhanTuTrenTrang }
       }),
-      providesTags: ['User']
+      providesTags: result =>
+        result
+          ? [...result.items.map(({ taiKhoan }) => ({ type: 'User', id: taiKhoan })), { type: 'User', id: 'LIST' }]
+          : [{ type: 'User', id: 'LIST' }]
     }),
     getUserType: build.query({
       query: () => 'QuanLyNguoiDung/LayDanhSachLoaiNguoiDung'
@@ -43,7 +46,21 @@ export const userApi = createApi({
         method: 'POST',
         data: body
       }),
-      invalidatesTags: ['User']
+      invalidatesTags: [{ type: 'User', id: 'LIST' }]
+    }),
+    updateUser: build.mutation({
+      query: body => ({
+        url: 'QuanLyNguoiDung/CapNhatThongTinNguoiDung',
+        method: 'POST',
+        data: body
+      }),
+      invalidatesTags: ({ taiKhoan }, error) =>
+        [
+          {
+            type: 'User',
+            id: taiKhoan
+          }
+        ].concat(error ? [] : [{ type: 'User', id: 'LIST' }])
     }),
     deleteUser: build.mutation({
       query: taiKhoan => ({
@@ -63,5 +80,6 @@ export const {
   useGetUserListByPaginationQuery,
   useGetUserTypeQuery,
   useAddUserMutation,
+  useUpdateUserMutation,
   useDeleteUserMutation
 } = userApi

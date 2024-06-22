@@ -1,6 +1,7 @@
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { CircleArrowRight } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { NavLink, useNavigate } from 'react-router-dom'
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
@@ -13,6 +14,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { useGetUserInfoMutation } from '@/redux/api/user.service'
+import { setUserInfo } from '@/redux/reducer/user.slice'
 import { TOKEN, USER_LOGIN } from '@/utils/config'
 
 const tabs = ['Home', 'News', 'Contact']
@@ -20,10 +23,19 @@ const tabs = ['Home', 'News', 'Contact']
 const Header = () => {
   const [hidden, setHidden] = useState(false)
 
+  const dispatch = useDispatch()
+
   const navigate = useNavigate()
 
-  const { scrollY } = useScroll()
+  const [getUserInfo] = useGetUserInfoMutation()
 
+  // Why dont use method GET????????
+  const onNavigate = async () => {
+    const result = await getUserInfo().unwrap()
+    dispatch(setUserInfo(result))
+  }
+
+  const { scrollY } = useScroll()
   useMotionValueEvent(scrollY, 'change', latestScrollY => {
     const previousScrollY = scrollY.getPrevious()
 
@@ -118,11 +130,9 @@ const Header = () => {
               <DropdownMenuContent align='end' className='mt-2 cursor-pointer'>
                 <DropdownMenuLabel>Hello, {user.hoTen}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className='cursor-pointer'>
-                  <NavLink to='/profile' className='flex items-center gap-2'>
-                    <span>Profile</span>
-                  </NavLink>
-                </DropdownMenuItem>
+                <NavLink to='/profile' onClick={onNavigate}>
+                  <DropdownMenuItem className='cursor-pointer'>Profile</DropdownMenuItem>
+                </NavLink>
                 <DropdownMenuItem className='cursor-pointer'>Support</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem

@@ -105,7 +105,7 @@ function User() {
           </Button>
         )
       },
-      cell: ({ row }) => <div className='capitalize'>{row.getValue('hoTen')}</div>
+      cell: ({ row }) => <div>{row.getValue('hoTen')}</div>
     },
     {
       accessorKey: 'email',
@@ -121,7 +121,7 @@ function User() {
           </Button>
         )
       },
-      cell: ({ row }) => <div className='capitalize'>{row.getValue('email')}</div>
+      cell: ({ row }) => <div>{row.getValue('email')}</div>
     },
     {
       accessorKey: 'taiKhoan',
@@ -137,7 +137,7 @@ function User() {
           </Button>
         )
       },
-      cell: ({ row }) => <div className='capitalize'>{row.getValue('taiKhoan')}</div>
+      cell: ({ row }) => <div>{row.getValue('taiKhoan')}</div>
     },
     {
       accessorKey: 'matKhau',
@@ -196,11 +196,16 @@ function User() {
 
         return (
           <>
-            <UpdateUser open={showUpdateSheet} onOpenChange={setShowUpdateSheet} ids={row.original} user={listUser} />
+            <UpdateUser
+              open={showUpdateSheet}
+              onOpenChange={setShowUpdateSheet}
+              ids={row.original.taiKhoan}
+              user={listUser}
+            />
             <DeleteUser
               open={showDeleteDialog}
               onOpenChange={setShowDeleteDialog}
-              id={row.original}
+              id={row.original.taiKhoan}
               showTrigger={false}
               onSuccess={() => row.toggleSelected(false)}
             />

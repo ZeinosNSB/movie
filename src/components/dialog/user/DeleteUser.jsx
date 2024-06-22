@@ -16,6 +16,17 @@ import { useDeleteUserMutation } from '@/redux/api/user.service'
 
 function DeleteUser({ id, showTrigger = true, ...props }) {
   const [deleteUser, { isLoading }] = useDeleteUserMutation()
+
+  const handleDelete = async () => {
+    try {
+      await deleteUser(id).unwrap()
+      toast.success('User deleted successfully')
+    } catch (error) {
+      const err = error?.data?.content
+      toast.error(err)
+    }
+  }
+
   return (
     <Dialog {...props}>
       {showTrigger ? (
@@ -37,14 +48,7 @@ function DeleteUser({ id, showTrigger = true, ...props }) {
           <DialogClose asChild>
             <Button variant='outline'>Cancel</Button>
           </DialogClose>
-          <Button
-            aria-label='Delete selected rows'
-            variant='destructive'
-            onClick={async () => {
-              await deleteUser(id.taiKhoan)
-              toast.success('User deleted successfully.')
-            }}
-          >
+          <Button aria-label='Delete selected rows' variant='destructive' onClick={() => handleDelete()}>
             {isLoading && <ReloadIcon className='mr-2 size-4 animate-spin' aria-hidden='true' />}
             Delete
           </Button>

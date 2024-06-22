@@ -32,7 +32,7 @@ function SignUp() {
     const { matKhauXacNhan, ...data } = values
 
     try {
-      await signUp(data)
+      await signUp(data).unwrap()
       navigate('/signin')
     } catch (error) {
       const err = error?.data?.content

@@ -3,7 +3,6 @@ import { ReloadIcon } from '@radix-ui/react-icons'
 import { PlusCircle } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -46,19 +45,17 @@ function AddUser() {
     const { matKhauXacNhan, ...data } = values
 
     try {
-      await addUser(data)
-
-      await toast.success('Film added successfully')
+      await addUser(data).unwrap()
     } catch (error) {
-      const err = error?.content
+      const err = error?.data?.content
       const userError = err?.startsWith('Tài khoản') && err
       const emailError = err?.startsWith('Email') && err
-      console.log(err)
 
       form.setError('submitUserError', { message: userError })
       form.setError('submitEmailError', { message: emailError })
     }
   }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>

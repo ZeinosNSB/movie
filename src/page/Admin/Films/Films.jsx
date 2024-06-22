@@ -102,7 +102,7 @@ function Films() {
           </Button>
         )
       },
-      cell: ({ row }) => <div className='capitalize'>{row.getValue('maPhim')}</div>
+      cell: ({ row }) => <div>{row.getValue('maPhim')}</div>
     },
     {
       accessorKey: 'hinhAnh',
@@ -125,7 +125,7 @@ function Films() {
           </Button>
         )
       },
-      cell: ({ row }) => <div className='capitalize'>{row.getValue('tenPhim').slice(0, 25) + '...'}</div>
+      cell: ({ row }) => <div>{row.getValue('tenPhim').slice(0, 25) + '...'}</div>
     },
     {
       accessorKey: 'moTa',
@@ -141,7 +141,7 @@ function Films() {
           </Button>
         )
       },
-      cell: ({ row }) => <div className='lowercase'>{row.getValue('moTa').slice(0, 50) + '...'}</div>
+      cell: ({ row }) => <div>{row.getValue('moTa').slice(0, 50) + '...'}</div>
     },
     {
       id: 'actions',
