@@ -5,10 +5,18 @@ import axiosBaseQuery from '@/service/axiosBaseQuery'
 export const userApi = createApi({
   reducerPath: 'userApi',
   baseQuery: axiosBaseQuery(),
+  tagTypes: ['User'],
   endpoints: build => ({
     signIn: build.mutation({
       query: body => ({
         url: 'QuanLyNguoiDung/DangNhap',
+        method: 'POST',
+        data: body
+      })
+    }),
+    signUp: build.mutation({
+      query: body => ({
+        url: 'QuanLyNguoiDung/DangKy',
         method: 'POST',
         data: body
       })
@@ -18,8 +26,42 @@ export const userApi = createApi({
         url: 'QuanLyNguoiDung/ThongTinTaiKhoan',
         method: 'POST'
       })
+    }),
+    getUserListByPagination: build.query({
+      query: ({ MaNhom, tuKhoa, soTrang, soPhanTuTrenTrang }) => ({
+        url: 'QuanLyNguoiDung/LayDanhSachNguoiDungPhanTrang',
+        params: { MaNhom, tuKhoa, soTrang, soPhanTuTrenTrang }
+      }),
+      providesTags: ['User']
+    }),
+    getUserType: build.query({
+      query: () => 'QuanLyNguoiDung/LayDanhSachLoaiNguoiDung'
+    }),
+    addUser: build.mutation({
+      query: body => ({
+        url: 'QuanLyNguoiDung/ThemNguoiDung',
+        method: 'POST',
+        data: body
+      }),
+      invalidatesTags: ['User']
+    }),
+    deleteUser: build.mutation({
+      query: taiKhoan => ({
+        url: 'QuanLyNguoiDung/XoaNguoiDung',
+        method: 'DELETE',
+        params: { taiKhoan }
+      }),
+      invalidatesTags: ['User']
     })
   })
 })
 
-export const { useSignInMutation, useGetUserInfoMutation } = userApi
+export const {
+  useSignInMutation,
+  useSignUpMutation,
+  useGetUserInfoMutation,
+  useGetUserListByPaginationQuery,
+  useGetUserTypeQuery,
+  useAddUserMutation,
+  useDeleteUserMutation
+} = userApi

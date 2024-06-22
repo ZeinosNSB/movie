@@ -1,4 +1,5 @@
 import { ReloadIcon, TrashIcon } from '@radix-ui/react-icons'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -11,8 +12,10 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
+import { useDeleteUserMutation } from '@/redux/api/user.service'
 
-export function DeleteDialog({ film, showTrigger = true, ...props }) {
+function DeleteUser({ id, showTrigger = true, ...props }) {
+  const [deleteUser, { isLoading }] = useDeleteUserMutation()
   return (
     <Dialog {...props}>
       {showTrigger ? (
@@ -27,7 +30,7 @@ export function DeleteDialog({ film, showTrigger = true, ...props }) {
         <DialogHeader>
           <DialogTitle>Are you absolutely sure?</DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently delete this film from our servers.
+            This action cannot be undone. This will permanently delete this user from our servers.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className='gap-2 sm:space-x-0'>
@@ -37,11 +40,12 @@ export function DeleteDialog({ film, showTrigger = true, ...props }) {
           <Button
             aria-label='Delete selected rows'
             variant='destructive'
-            onClick={() => {
-              console.log(film?.maPhim)
+            onClick={async () => {
+              await deleteUser(id.taiKhoan)
+              toast.success('User deleted successfully.')
             }}
           >
-            <ReloadIcon className='mr-2 size-4 animate-spin' aria-hidden='true' />
+            {isLoading && <ReloadIcon className='mr-2 size-4 animate-spin' aria-hidden='true' />}
             Delete
           </Button>
         </DialogFooter>
@@ -49,3 +53,5 @@ export function DeleteDialog({ film, showTrigger = true, ...props }) {
     </Dialog>
   )
 }
+
+export default DeleteUser

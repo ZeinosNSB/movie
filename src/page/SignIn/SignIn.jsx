@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -29,7 +30,6 @@ function SignIn() {
   const onSubmit = async values => {
     try {
       const result = await signIn(values).unwrap()
-      console.log(values)
       if (result?.accessToken) {
         localStorage.setItem(TOKEN, result?.accessToken)
         localStorage.setItem(USER_LOGIN, JSON.stringify(result))
@@ -43,13 +43,13 @@ function SignIn() {
 
   return (
     <Form {...form}>
-      <div className='flex items-center justify-center py-12'>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className='mx-auto grid w-[350px] gap-6'>
-            <div className='grid gap-2 text-center'>
-              <h1 className='text-3xl font-bold'>Login</h1>
-              <p className='text-balance text-muted-foreground'>Enter your email below to login to your account</p>
-            </div>
+      <Card className='mx-auto w-[400px] my-auto'>
+        <CardHeader>
+          <CardTitle className='text-xl'>Login</CardTitle>
+          <CardDescription>Welcome back! Please enter your credentials to access your account.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className='grid gap-4'>
               <FormField
                 control={form.control}
@@ -81,7 +81,6 @@ function SignIn() {
                   </FormItem>
                 )}
               />
-
               <Button type='submit' className='w-full'>
                 Login
               </Button>
@@ -95,9 +94,9 @@ function SignIn() {
                 Sign up
               </Link>
             </div>
-          </div>
-        </form>
-      </div>
+          </form>
+        </CardContent>
+      </Card>
     </Form>
   )
 }

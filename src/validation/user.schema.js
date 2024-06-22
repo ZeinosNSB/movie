@@ -1,11 +1,6 @@
 import { z } from 'zod'
 
-export const signinSchema = z.object({
-  taiKhoan: z.string(),
-  matKhau: z.string()
-})
-
-export const signupSchema = z
+export const userSchema = z
   .object({
     taiKhoan: z.string().min(5, {
       message: 'Username must be at least 5 characters.'
@@ -21,7 +16,8 @@ export const signupSchema = z
     soDt: z.string().min(10, {
       message: 'Phone number must be at least 10 digits.'
     }),
-    maNhom: z.string().default('GP01')
+    maNhom: z.string().default('GP01'),
+    maLoaiNguoiDung: z.string().default('KhachHang')
   })
   .refine(value => value.matKhau === value.matKhauXacNhan, {
     message: 'The confirm password does not match the original password.',

@@ -4,6 +4,7 @@ import { CalendarIcon, PlusCircle } from 'lucide-react'
 import moment from 'moment'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
@@ -17,18 +18,23 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Switch } from '@/components/ui/switch'
-import { addFilmSchema } from '@/validation'
+import { useAddFilmMutation } from '@/redux/api/film.service'
+import { GROUP_ID } from '@/utils/config'
+import { FilmSchema } from '@/validation'
 
-export function CreateDialog() {
+export function AddFilm() {
   const [open, setOpen] = useState(false)
   const [imgSrc, setImgSrc] = useState(null)
+  const [image, setImage] = useState(null)
+
+  const [addFilm, { isLoading }] = useAddFilmMutation()
 
   const form = useForm({
-    resolver: zodResolver(addFilmSchema),
+    resolver: zodResolver(FilmSchema),
     defaultValues: {
       tenPhim: '',
       trailer: '',
@@ -38,12 +44,11 @@ export function CreateDialog() {
       sapChieu: false,
       hot: false,
       danhGia: 0,
-      hinhAnh: ''
+      hinhAnh: {}
     }
   })
 
   const handleChangeFile = e => {
-    //Lấy file ra từ e
     let file = e.target.files[0]
     if (
       file.type === 'image/jpeg' ||
@@ -53,37 +58,41 @@ export function CreateDialog() {
     ) {
       let reader = new FileReader()
       reader.readAsDataURL(file)
-      reader.onload = e => {
-        setImgSrc(e.target.result) //base64 image
-      }
-      form.setValue('hinhAnh', file)
+      reader.onload = () => setImgSrc(reader.result) //Hình base 64
+
+      setImage(file)
     }
   }
 
-  // function onSubmit(input) {
-  //   startCreateTransition(async () => {
-  //     const { error } = await createTask(input)
-  //
-  //     if (error) {
-  //       toast.error(error)
-  //       return
-  //     }
-  //
-  //     form.reset()
-  //     setOpen(false)
-  //     toast.success('Task created')
-  //   })
-  // }
-
-  const onSubmit = values => {
+  const onSubmit = async values => {
     values.ngayKhoiChieu = moment(values.ngayKhoiChieu).format('DD/MM/YYYY')
-    console.log(values)
+    values.maNhom = GROUP_ID
+    values.hinhAnh = image
+
+    let formData = new FormData()
+    for (let key in values) {
+      if (key !== 'hinhAnh') {
+        formData.append(key, values[key])
+      } else {
+        formData.append('File', values.hinhAnh, values.hinhAnh.name)
+      }
+    }
+
+    try {
+      await addFilm(formData)
+      setImgSrc(null)
+      setOpen(false)
+      form.reset()
+      await toast.success('Film added successfully')
+    } catch (error) {
+      console.error('Error submitting form:', error)
+    }
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size='sm' className='ml-4 '>
+        <Button size='sm' className='ml-4'>
           <PlusCircle className='mr-2 size-4' />
           <span className='sr-only sm:not-sr-only sm:whitespace-nowrap'>Add New Film</span>
         </Button>
@@ -221,19 +230,21 @@ export function CreateDialog() {
             <FormField
               control={form.control}
               name='hinhAnh'
-              render={({ field }) => (
+              render={() => (
                 <FormItem>
                   <FormLabel>Image</FormLabel>
                   <FormControl>
                     <>
                       <Input
-                        {...field}
                         className='w-64 hover:bg-accent p-0 cursor-pointer'
                         type='file'
                         accept='image/png, image/jpeg,image/gif,image/png'
                         onChange={handleChangeFile}
                       />
-                      {imgSrc && <img src={imgSrc} alt='preview' className='w-16 h-20 rounded-xl mt-2' />}
+                      <FormDescription>
+                        <span className='text-muted-foreground'>Only .png, .jpg, .jpeg, .gif files are allowed.</span>
+                      </FormDescription>
+                      {imgSrc && <img src={imgSrc} alt='Preview' className='w-32 h-48 rounded-xl' />}
                     </>
                   </FormControl>
                   <FormMessage />
@@ -247,8 +258,8 @@ export function CreateDialog() {
                   Cancel
                 </Button>
               </DialogClose>
-              <Button>
-                <ReloadIcon className='mr-2 size-4 animate-spin' aria-hidden='true' />
+              <Button type='submit'>
+                {isLoading && <ReloadIcon className='mr-2 size-4 animate-spin' aria-hidden='true' />}
                 Create
               </Button>
             </DialogFooter>

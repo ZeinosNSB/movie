@@ -5,6 +5,7 @@ import axiosBaseQuery from '@/service/axiosBaseQuery'
 export const filmApi = createApi({
   reducerPath: 'filmApi',
   baseQuery: axiosBaseQuery(),
+  tagTypes: ['Film'],
   endpoints: build => ({
     getBannerFilm: build.query({
       query: () => 'QuanLyPhim/LayDanhSachBanner'
@@ -16,12 +17,44 @@ export const filmApi = createApi({
       })
     }),
     getFilmListByPagination: build.query({
-      query: ({ maNhom, soTrang, soPhanTuTrenTrang, tenPhim }) => ({
+      query: ({ maNhom, tenPhim, soTrang, soPhanTuTrenTrang }) => ({
         url: 'QuanLyPhim/LayDanhSachPhimPhanTrang',
-        params: { maNhom, soTrang, soPhanTuTrenTrang, tenPhim }
-      })
+        params: { maNhom, tenPhim, soTrang, soPhanTuTrenTrang }
+      }),
+      providesTags: ['Film']
+    }),
+    addFilm: build.mutation({
+      query: body => ({
+        url: 'QuanLyPhim/ThemPhimUploadHinh',
+        method: 'POST',
+        data: body
+      }),
+      invalidatesTags: ['Film'] //Hoi thua:))
+    }),
+    updateFilm: build.mutation({
+      query: body => ({
+        url: 'QuanLyPhim/CapNhatPhimUpload',
+        method: 'POST',
+        data: body
+      }),
+      invalidatesTags: ['Film']
+    }),
+    deleteFilm: build.mutation({
+      query: MaPhim => ({
+        url: 'QuanLyPhim/XP',
+        method: 'DELETE',
+        params: { MaPhim }
+      }),
+      invalidatesTags: ['Film']
     })
   })
 })
 
-export const { useGetBannerFilmQuery, useGetFilmListQuery, useGetFilmListByPaginationQuery } = filmApi
+export const {
+  useGetBannerFilmQuery,
+  useGetFilmListQuery,
+  useGetFilmListByPaginationQuery,
+  useAddFilmMutation,
+  useUpdateFilmMutation,
+  useDeleteFilmMutation
+} = filmApi

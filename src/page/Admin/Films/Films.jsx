@@ -1,7 +1,9 @@
 import {
+  CaretSortIcon,
   ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  DotsHorizontalIcon,
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon
 } from '@radix-ui/react-icons'
@@ -13,12 +15,15 @@ import {
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table'
+import { Edit, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
-import { CreateDialog } from '@/components/dialog/film/CreateDialog'
-import { DeleteDialog } from '@/components/dialog/film/DeleteDialog'
+import { AddFilm } from '@/components/dialog/film/AddFilm'
+import { DeleteFilm } from '@/components/dialog/film/DeleteFilm'
+import { UpdateFilm } from '@/components/sheet/film/UpdateFilm'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -26,11 +31,12 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import columns from '@/page/Admin/Films/columns'
+import { useDebounce } from '@/hooks/useDebounce'
 import { useGetFilmListByPaginationQuery } from '@/redux/api/film.service'
 import { GROUP_ID } from '@/utils/config'
 
@@ -51,12 +57,142 @@ function Films() {
   const [rowSelection, setRowSelection] = useState({})
   const [pageIndex, setPageIndex] = useState(1)
   const [countPerPage, setCountPerPage] = useState(PAGE_SIZE)
+  const [search, setSearch] = useState('')
+
+  const keywordDebounce = useDebounce(search)
 
   const { data: listFilm, isFetching } = useGetFilmListByPaginationQuery({
     maNhom: GROUP_ID,
     soTrang: pageIndex,
-    soPhanTuTrenTrang: countPerPage
+    soPhanTuTrenTrang: countPerPage,
+    ...(keywordDebounce && { tenPhim: keywordDebounce })
   })
+
+  const columns = [
+    {
+      id: 'select',
+      header: ({ table }) => (
+        <Checkbox
+          checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
+          onCheckedChange={value => table.toggleAllPageRowsSelected(!!value)}
+          aria-label='Select all'
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={value => row.toggleSelected(!!value)}
+          aria-label='Select row'
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false
+    },
+    {
+      accessorKey: 'maPhim',
+      header: ({ column }) => {
+        return (
+          <Button
+            className='px-3 -ml-3'
+            variant='ghost'
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            ID
+            <CaretSortIcon className='ml-2 h-4 w-4' />
+          </Button>
+        )
+      },
+      cell: ({ row }) => <div className='capitalize'>{row.getValue('maPhim')}</div>
+    },
+    {
+      accessorKey: 'hinhAnh',
+      header: 'Image',
+      cell: ({ row }) => (
+        <img src={row.getValue('hinhAnh')} alt={row.getValue('tenPhim')} className='h-20 w-16 rounded-xl' />
+      )
+    },
+    {
+      accessorKey: 'tenPhim',
+      header: ({ column }) => {
+        return (
+          <Button
+            className='px-3 -ml-3'
+            variant='ghost'
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            Title
+            <CaretSortIcon className='ml-2 h-4 w-4' />
+          </Button>
+        )
+      },
+      cell: ({ row }) => <div className='capitalize'>{row.getValue('tenPhim').slice(0, 25) + '...'}</div>
+    },
+    {
+      accessorKey: 'moTa',
+      header: ({ column }) => {
+        return (
+          <Button
+            className='px-3 -ml-3'
+            variant='ghost'
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            Description
+            <CaretSortIcon className='ml-2 h-4 w-4' />
+          </Button>
+        )
+      },
+      cell: ({ row }) => <div className='lowercase'>{row.getValue('moTa').slice(0, 50) + '...'}</div>
+    },
+    {
+      id: 'actions',
+      enableHiding: false,
+      cell: ({ row }) => {
+        const [showDeleteTaskDialog, setShowDeleteTaskDialog] = useState(false)
+        const [showUpdateTaskSheet, setShowUpdateTaskSheet] = useState(false)
+
+        return (
+          <>
+            <UpdateFilm
+              open={showUpdateTaskSheet}
+              onOpenChange={setShowUpdateTaskSheet}
+              ids={row.original}
+              film={listFilm}
+            />
+            <DeleteFilm
+              open={showDeleteTaskDialog}
+              onOpenChange={setShowDeleteTaskDialog}
+              film={row.original}
+              showTrigger={false}
+              onSuccess={() => row.toggleSelected(false)}
+            />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant='ghost' className='flex size-8 p-0 data-[state=open]:bg-muted'>
+                  <DotsHorizontalIcon className='size-4' aria-hidden='true' />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent align='end' className='w-36 p-1 rounded-lg'>
+                <div
+                  onClick={() => {
+                    setShowUpdateTaskSheet(true)
+                  }}
+                  className='w-full bg-white outline-none cursor-pointer flex justify-between items-center hover:bg-muted rounded-md text-sm p-1.5 mb-0.5'
+                >
+                  Edit <Edit className='h-4' />
+                </div>
+                <div
+                  onClick={() => setShowDeleteTaskDialog(true)}
+                  className='w-full bg-white outline-none text-rose-700 focus:text-rose-400 transition-colors hover:bg-muted rounded-sm cursor-pointer flex justify-between items-center text-sm p-1.5'
+                >
+                  Delete <Trash2 className='h-4' />
+                </div>
+              </PopoverContent>
+            </Popover>
+          </>
+        )
+      }
+    }
+  ]
 
   const table = useReactTable({
     data: listFilm?.items || [],
@@ -92,21 +228,21 @@ function Films() {
 
         <div className='ml-auto gap-2'>
           {table.getFilteredSelectedRowModel().rows.length > 0 ? (
-            <DeleteDialog
+            <DeleteFilm
               tasks={table.getFilteredSelectedRowModel().rows.map(row => row.original)}
               onSuccess={() => table.toggleAllRowsSelected(false)}
             />
           ) : null}
 
-          <CreateDialog />
+          <AddFilm />
         </div>
       </div>
       <Card>
         <CardHeader>
           <CardTitle>Films</CardTitle>
           <CardDescription>
-            Welcome to the Film Management Admin Panel! Easily manage movies, genres, directors, and user accounts with
-            a user-friendly interface and comprehensive features.
+            Efficiently manage films with options to add, edit, or delete movies along with their images, titles, and
+            descriptions.
           </CardDescription>
           <Separator />
         </CardHeader>
@@ -115,10 +251,8 @@ function Films() {
             <div className='flex items-center pb-6'>
               <Input
                 placeholder='Filter name...'
-                value={table.getColumn('tenPhim')?.getFilterValue() ?? ''}
-                onChange={event => {
-                  table.getColumn('tenPhim')?.setFilterValue(event.target.value)
-                }}
+                value={search}
+                onChange={event => setSearch(event.target.value)}
                 className='max-w-sm'
               />
               <DropdownMenu>
