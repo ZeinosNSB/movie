@@ -46,6 +46,8 @@ function AddUser() {
 
     try {
       await addUser(data).unwrap()
+      form.reset()
+      setOpen(false)
     } catch (error) {
       const err = error?.data?.content
       const userError = err?.startsWith('Tài khoản') && err

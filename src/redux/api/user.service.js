@@ -62,13 +62,20 @@ export const userApi = createApi({
           }
         ].concat(error ? [] : [{ type: 'User', id: 'LIST' }])
     }),
+    updateClientUser: build.mutation({
+      query: body => ({
+        url: 'QuanLyNguoiDung/CapNhatThongTinNguoiDung',
+        method: 'PUT',
+        data: body
+      })
+    }),
     deleteUser: build.mutation({
       query: taiKhoan => ({
         url: 'QuanLyNguoiDung/XoaNguoiDung',
         method: 'DELETE',
         params: { taiKhoan }
       }),
-      invalidatesTags: ['User']
+      invalidatesTags: [{ type: 'User', id: 'LIST' }]
     })
   })
 })
@@ -81,5 +88,6 @@ export const {
   useGetUserTypeQuery,
   useAddUserMutation,
   useUpdateUserMutation,
+  useUpdateClientUserMutation,
   useDeleteUserMutation
 } = userApi
