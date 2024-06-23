@@ -23,6 +23,8 @@ function UpdateUser({ ids, user, onOpenChange, ...props }) {
     resolver: zodResolver(userSchema)
   })
 
+  console.log(userInfo)
+
   useEffect(() => {
     form.setValue('taiKhoan', userInfo?.taiKhoan)
     form.setValue('email', userInfo?.email)
@@ -39,7 +41,6 @@ function UpdateUser({ ids, user, onOpenChange, ...props }) {
 
     try {
       await updateUser(data).unwrap()
-
       toast.success('User updated successfully')
     } catch (error) {
       const err = error?.data?.content
@@ -173,7 +174,7 @@ function UpdateUser({ ids, user, onOpenChange, ...props }) {
                       <SelectItem value='GP02'>GP02</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <FormMessage name='maNhom' />
                 </FormItem>
               )}
             />
@@ -197,7 +198,7 @@ function UpdateUser({ ids, user, onOpenChange, ...props }) {
                       ))}
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <FormMessage name='maLoaiNguoiDung' />
                 </FormItem>
               )}
             />

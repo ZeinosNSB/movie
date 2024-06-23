@@ -16,8 +16,12 @@ export const userSchema = z
     soDt: z.string().min(10, {
       message: 'Phone number must be at least 10 digits.'
     }),
-    maNhom: z.string(),
-    maLoaiNguoiDung: z.string().default('KhachHang')
+    maNhom: z.string().min(1, {
+      message: 'Group ID cannot be empty.'
+    }),
+    maLoaiNguoiDung: z.string().min(1, {
+      message: 'User type cannot be empty.'
+    })
   })
   .refine(value => value.matKhau === value.matKhauXacNhan, {
     message: 'The confirm password does not match the original password.',

@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { CircleArrowRight, Clock, Film, Package2, PanelLeft, Settings, Users2 } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
 
 import logo from '@/assets/logo/cybersoft.png'
@@ -24,6 +25,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { useGetUserInfoMutation } from '@/redux/api/user.service'
+import { setUserInfo } from '@/redux/reducer/user.slice'
 import { TOKEN, USER_LOGIN } from '@/utils/config'
 
 const tabs = [
@@ -34,18 +37,28 @@ const tabs = [
 
 function AdminTemplate() {
   const [selected, setSelected] = useState(tabs[0].path)
-  const navigate = useNavigate()
-  const user = useMemo(() => JSON.parse(localStorage.getItem(USER_LOGIN)), [])
 
+  const navigate = useNavigate()
+
+  const dispatch = useDispatch()
+
+  const user = useMemo(() => JSON.parse(localStorage.getItem(USER_LOGIN)), [])
   const currentPath = location.pathname.split('/').pop()
 
   if (user?.maLoaiNguoiDung !== 'QuanTri') {
     navigate('/home')
   }
+  const [getUserInfo] = useGetUserInfoMutation()
 
   useEffect(() => {
     setSelected(currentPath)
   }, [currentPath])
+
+  // Why dont use method GET????????
+  const onNavigate = async () => {
+    const result = await getUserInfo().unwrap()
+    dispatch(setUserInfo(result))
+  }
 
   return (
     <div className='flex min-h-screen w-full flex-col bg-muted/40'>
@@ -164,11 +177,11 @@ function AdminTemplate() {
             <DropdownMenuContent align='end' className='mt-2 cursor-pointer'>
               <DropdownMenuLabel>Hello, {user?.hoTen}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className='cursor-pointer'>
-                <NavLink to='/profile' className='flex items-center gap-2'>
+              <NavLink to='/profile' onClick={onNavigate}>
+                <DropdownMenuItem className='cursor-pointer'>
                   <span>Profile</span>
-                </NavLink>
-              </DropdownMenuItem>
+                </DropdownMenuItem>
+              </NavLink>
               <DropdownMenuItem className='cursor-pointer'>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem

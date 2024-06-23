@@ -84,8 +84,6 @@ export function UpdateFilm({ ids, film, onOpenChange, ...props }) {
     values.hinhAnh = image
     values.maPhim = ids.maPhim
 
-    console.log('values', values)
-
     let formData = new FormData()
     for (let key in values) {
       if (key !== 'hinhAnh') {
@@ -98,7 +96,6 @@ export function UpdateFilm({ ids, film, onOpenChange, ...props }) {
     }
 
     try {
-      console.log('danhGia', formData.get('danhGia'))
       await updateFilm(formData).unwrap()
       setImgSrc(null)
       onOpenChange(false)
