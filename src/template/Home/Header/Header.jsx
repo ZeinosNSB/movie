@@ -18,8 +18,6 @@ import { useGetUserInfoMutation } from '@/redux/api/user.service'
 import { setUserInfo } from '@/redux/reducer/user.slice'
 import { TOKEN, USER_LOGIN } from '@/utils/config'
 
-const tabs = ['Home', 'News', 'Contact']
-
 const Header = () => {
   const [tabs, setTabs] = useState(['Home', 'News', 'Contact'])
   const [hidden, setHidden] = useState(false)
@@ -53,7 +51,7 @@ const Header = () => {
     if (user?.maLoaiNguoiDung === 'QuanTri') {
       setTabs(prevTabs => [...prevTabs, 'Admin'])
     }
-  }, [])
+  }, [user])
 
   return (
     <motion.header
