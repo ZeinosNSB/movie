@@ -1,6 +1,6 @@
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion'
 import { CircleArrowRight } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { NavLink, useNavigate } from 'react-router-dom'
 
@@ -21,6 +21,7 @@ import { TOKEN, USER_LOGIN } from '@/utils/config'
 const tabs = ['Home', 'News', 'Contact']
 
 const Header = () => {
+  const [tabs, setTabs] = useState(['Home', 'News', 'Contact'])
   const [hidden, setHidden] = useState(false)
 
   const dispatch = useDispatch()
@@ -29,7 +30,7 @@ const Header = () => {
 
   const [getUserInfo] = useGetUserInfoMutation()
 
-  // Why dont use method GET????????
+  // Why don't use method GET????????
   const onNavigate = async () => {
     const result = await getUserInfo().unwrap()
     dispatch(setUserInfo(result))
@@ -47,6 +48,12 @@ const Header = () => {
   })
 
   const user = useMemo(() => JSON.parse(localStorage.getItem(USER_LOGIN)), [])
+
+  useEffect(() => {
+    if (user?.maLoaiNguoiDung === 'QuanTri') {
+      setTabs(prevTabs => [...prevTabs, 'Admin'])
+    }
+  }, [])
 
   return (
     <motion.header
