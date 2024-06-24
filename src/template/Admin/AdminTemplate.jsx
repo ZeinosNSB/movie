@@ -47,6 +47,7 @@ function AdminTemplate() {
   if (user?.maLoaiNguoiDung !== 'QuanTri') {
     navigate('/home')
   }
+
   const [getUserInfo] = useGetUserInfoMutation()
 
   useEffect(() => {
