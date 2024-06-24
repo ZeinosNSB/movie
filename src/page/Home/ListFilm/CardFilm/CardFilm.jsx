@@ -1,3 +1,4 @@
+import { CirclePlay } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -40,29 +41,15 @@ function CardFilm({ film }) {
         >
           <img className='opacity-0 h-0' src={film.hinhAnh} alt='Film' />
         </div>
-        <figcaption className='flip-card-back absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center gap-3 rounded-3xl bg-slate-950 text-slate-100 transition-all duration-1000 ease-in-out'>
-          <h2 className='mb-2 text-2xl font-bold'>Bald Eagle</h2>
-          <img
-            src='https://images.unsplash.com/photo-1611689342806-0863700ce1e4?q=80&w=600'
-            alt='Bald Eagle Portrait'
-            className='size-24 rounded-full object-cover'
-          />
-          <h3 className='font-semibold'>National Symbol of the USA</h3>
-          <div className='grid grid-cols-1 grid-rows-3 gap-2 text-nowrap text-sm'>
-            <div className='rounded-full bg-amber-500 px-4 py-2 text-center font-semibold text-slate-900'>
-              White & Brown
-            </div>
-            <div className='rounded-full bg-amber-500 px-4 py-2 text-center font-semibold text-slate-900'>
-              Fish Expert
-            </div>
-            <div className='rounded-full bg-amber-500 px-4 py-2 text-center font-semibold text-slate-900'>
-              Found Near Water
-            </div>
-          </div>
+        <figcaption
+          className='text-slate-100 flip-card-back absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-3xl bg-cover bg-center transition-all duration-1000 ease-in-out opacity-75'
+          style={{ backgroundImage: `url(${film.hinhAnh})` }}
+        >
+          <CirclePlay className='size-10 hover:text-red-800 hover:scale-125 transition-colors duration-200 ease-in' />
         </figcaption>
       </figure>
       <Button className='w-full mt-6' onClick={() => navigate(`/detail/${film.maPhim}`)}>
-        Đặt vé
+        Buy Ticket
       </Button>
     </div>
   )
