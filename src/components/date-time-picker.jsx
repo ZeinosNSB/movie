@@ -5,10 +5,10 @@ import { Label } from '@/components/ui/label'
 
 import { TimePickerInput } from './time-picker-input'
 
-export function TimePickerDemo({ date, setDate }) {
+export function TimePicker({ date, setDate }) {
   const minuteRef = React.useRef(null)
   const hourRef = React.useRef(null)
-  const secondRef = React.useRef > null
+  const secondRef = React.useRef(null)
 
   return (
     <div className='flex items-end gap-2'>

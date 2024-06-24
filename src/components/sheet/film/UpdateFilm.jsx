@@ -138,7 +138,7 @@ export function UpdateFilm({ id, film, onOpenChange, ...props }) {
                   <FormControl>
                     <Input placeholder='Name of movie' {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage name='tenPhim' />
                 </FormItem>
               )}
             />
@@ -151,7 +151,7 @@ export function UpdateFilm({ id, film, onOpenChange, ...props }) {
                   <FormControl>
                     <Input placeholder='Trailer URL' {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage name='trailer' />
                 </FormItem>
               )}
             />
@@ -164,7 +164,7 @@ export function UpdateFilm({ id, film, onOpenChange, ...props }) {
                   <FormControl>
                     <Input placeholder='Description' {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage name='moTa' />
                 </FormItem>
               )}
             />
@@ -196,7 +196,7 @@ export function UpdateFilm({ id, film, onOpenChange, ...props }) {
                       />
                     </PopoverContent>
                   </Popover>
-                  <FormMessage />
+                  <FormMessage name='ngayKhoiChieu' />
                 </FormItem>
               )}
             />

@@ -114,7 +114,7 @@ export function AddFilm() {
                   <FormControl>
                     <Input placeholder='Name of movie' {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage name='tenPhim' />
                 </FormItem>
               )}
             />
@@ -127,7 +127,7 @@ export function AddFilm() {
                   <FormControl>
                     <Input placeholder='Trailer URL' {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage name='trailer' />
                 </FormItem>
               )}
             />
@@ -140,7 +140,7 @@ export function AddFilm() {
                   <FormControl>
                     <Input placeholder='Description' {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage name='moTa' />
                 </FormItem>
               )}
             />
@@ -172,7 +172,7 @@ export function AddFilm() {
                       />
                     </PopoverContent>
                   </Popover>
-                  <FormMessage />
+                  <FormMessage name='ngayKhoiChieu' />
                 </FormItem>
               )}
             />
@@ -224,7 +224,7 @@ export function AddFilm() {
                   <FormControl>
                     <Input className='w-64' min={0} max={10} type='number' placeholder='Rating' {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage name='danhGia' />
                 </FormItem>
               )}
             />
@@ -248,7 +248,7 @@ export function AddFilm() {
                       {imgSrc && <img src={imgSrc} alt='Preview' className='w-32 h-48 rounded-xl' />}
                     </>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage name='hinhAnh' />
                 </FormItem>
               )}
             />
