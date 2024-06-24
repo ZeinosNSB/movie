@@ -6,7 +6,7 @@ export const FilmSchema = z.object({
   tenPhim: z.string().min(1, 'Movie name cannot be empty'),
   trailer: z.string().url('Trailer must be a valid URL'),
   moTa: z.string().min(1, 'Description cannot be empty'),
-  ngayKhoiChieu: z.date({ message: 'Release date must be a valid date' }),
+  ngayKhoiChieu: z.coerce.date({ message: 'Release date must be a valid date' }),
   dangChieu: z.boolean(),
   sapChieu: z.boolean(),
   hot: z.boolean(),

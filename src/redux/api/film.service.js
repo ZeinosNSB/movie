@@ -21,7 +21,10 @@ export const filmApi = createApi({
         url: 'QuanLyPhim/LayDanhSachPhimPhanTrang',
         params: { maNhom, tenPhim, soTrang, soPhanTuTrenTrang }
       }),
-      providesTags: ['Film']
+      providesTags: result =>
+        result
+          ? [...result.items.map(({ maPhim }) => ({ type: 'Film', id: maPhim })), { type: 'Film', id: 'LIST' }]
+          : [{ type: 'Film', id: 'LIST' }]
     }),
     addFilm: build.mutation({
       query: body => ({
@@ -29,7 +32,7 @@ export const filmApi = createApi({
         method: 'POST',
         data: body
       }),
-      invalidatesTags: ['Film'] //Hoi thua:))
+      invalidatesTags: (result, error) => (error ? [] : [{ type: 'Film', id: 'LIST' }])
     }),
     updateFilm: build.mutation({
       query: body => ({
@@ -37,7 +40,13 @@ export const filmApi = createApi({
         method: 'POST',
         data: body
       }),
-      invalidatesTags: ['Film']
+      invalidatesTags: ({ maPhim }, error) =>
+        [
+          {
+            type: 'Film',
+            id: maPhim
+          }
+        ].concat(error ? [] : [{ type: 'Film', id: 'LIST' }])
     }),
     deleteFilm: build.mutation({
       query: MaPhim => ({
@@ -45,7 +54,7 @@ export const filmApi = createApi({
         method: 'DELETE',
         params: { MaPhim }
       }),
-      invalidatesTags: ['Film']
+      invalidatesTags: (result, error) => (error ? [] : [{ type: 'Film', id: 'LIST' }])
     })
   })
 })
