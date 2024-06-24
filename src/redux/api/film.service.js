@@ -54,7 +54,8 @@ export const filmApi = createApi({
         method: 'DELETE',
         params: { MaPhim }
       }),
-      invalidatesTags: (result, error) => (error ? [] : [{ type: 'Film', id: 'LIST' }])
+      invalidatesTags: [{ type: 'Film', id: 'LIST' }]
+      // invalidatesTags: (result, error) => (error ? [] : [{ type: 'Film', id: 'LIST' }])
     })
   })
 })
