@@ -26,11 +26,11 @@ import { useUpdateFilmMutation } from '@/redux/api/film.service'
 import { GROUP_ID } from '@/utils/config'
 import { FilmSchema } from '@/validation'
 
-export function UpdateFilm({ ids, film, onOpenChange, ...props }) {
+export function UpdateFilm({ id, film, onOpenChange, ...props }) {
   const [imgSrc, setImgSrc] = useState(null)
   const [image, setImage] = useState(null)
 
-  const filmInfo = film?.items.find(film => film.maPhim === ids.maPhim)
+  const filmInfo = film?.items.find(film => film.maPhim === id)
 
   const [updateFilm, { isLoading }] = useUpdateFilmMutation()
 
@@ -82,7 +82,7 @@ export function UpdateFilm({ ids, film, onOpenChange, ...props }) {
     values.ngayKhoiChieu = moment(values.ngayKhoiChieu).format('DD/MM/YYYY')
     values.maNhom = GROUP_ID
     values.hinhAnh = image
-    values.maPhim = ids.maPhim
+    values.maPhim = id
 
     let formData = new FormData()
     for (let key in values) {

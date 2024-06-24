@@ -22,8 +22,15 @@ export const ticketApi = createApi({
         data: body
       }),
       invalidatesTags: [{ type: 'Ticket' }]
+    }),
+    createShowtime: build.mutation({
+      query: body => ({
+        url: 'QuanLyDatVe/TaoLichChieu',
+        method: 'POST',
+        data: body
+      })
     })
   })
 })
 
-export const { useGetMovieTicketsQuery, useBookTicketsMutation } = ticketApi
+export const { useGetMovieTicketsQuery, useBookTicketsMutation, useCreateShowtimeMutation } = ticketApi

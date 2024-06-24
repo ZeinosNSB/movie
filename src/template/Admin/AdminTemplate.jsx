@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { CircleArrowRight, Clock, Film, Package2, PanelLeft, Settings, Users2 } from 'lucide-react'
+import { CircleArrowRight, Film, Package2, PanelLeft, Settings, Users2 } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
@@ -31,8 +31,7 @@ import { TOKEN, USER_LOGIN } from '@/utils/config'
 
 const tabs = [
   { name: 'Users', path: 'users', icon: <Users2 className='h-5 w-5' /> },
-  { name: 'Films', path: 'films', icon: <Film className='h-5 w-5' /> },
-  { name: 'Showtime', path: 'showtime', icon: <Clock className='h-5 w-5' /> }
+  { name: 'Films', path: 'films', icon: <Film className='h-5 w-5' /> }
 ]
 
 function AdminTemplate() {

@@ -15,11 +15,12 @@ import {
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import { Edit, Trash2 } from 'lucide-react'
+import { CalendarPlus, Edit, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 import { AddFilm } from '@/components/dialog/film/AddFilm'
 import { DeleteFilm } from '@/components/dialog/film/DeleteFilm'
+import Showtime from '@/components/dialog/film/Showtime'
 import { UpdateFilm } from '@/components/sheet/film/UpdateFilm'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -147,21 +148,23 @@ function Films() {
       id: 'actions',
       enableHiding: false,
       cell: ({ row }) => {
-        const [showDeleteTaskDialog, setShowDeleteTaskDialog] = useState(false)
-        const [showUpdateTaskSheet, setShowUpdateTaskSheet] = useState(false)
+        const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+        const [showUpdateSheet, setShowUpdateSheet] = useState(false)
+        const [showShowtimeSheet, setShowShowtimeSheet] = useState(false)
 
         return (
           <>
             <UpdateFilm
-              open={showUpdateTaskSheet}
-              onOpenChange={setShowUpdateTaskSheet}
-              ids={row.original}
+              open={showUpdateSheet}
+              onOpenChange={setShowUpdateSheet}
+              id={row.original.maPhim}
               film={listFilm}
             />
+            <Showtime open={showShowtimeSheet} onOpenChange={setShowShowtimeSheet} id={row.original.maPhim} />
             <DeleteFilm
-              open={showDeleteTaskDialog}
-              onOpenChange={setShowDeleteTaskDialog}
-              film={row.original}
+              open={showDeleteDialog}
+              onOpenChange={setShowDeleteDialog}
+              id={row.original.maPhim}
               showTrigger={false}
               onSuccess={() => row.toggleSelected(false)}
             />
@@ -173,18 +176,22 @@ function Films() {
               </PopoverTrigger>
               <PopoverContent align='end' className='w-36 p-1 rounded-lg'>
                 <div
-                  onClick={() => {
-                    setShowUpdateTaskSheet(true)
-                  }}
+                  onClick={() => setShowUpdateSheet(true)}
                   className='w-full bg-white outline-none cursor-pointer flex justify-between items-center hover:bg-muted rounded-md text-sm p-1.5 mb-0.5'
                 >
-                  Edit <Edit className='h-4' />
+                  Edit <Edit className='size-4' />
                 </div>
                 <div
-                  onClick={() => setShowDeleteTaskDialog(true)}
+                  onClick={() => setShowShowtimeSheet(true)}
+                  className='w-full bg-white outline-none cursor-pointer flex justify-between items-center hover:bg-muted rounded-md text-sm p-1.5 mb-0.5'
+                >
+                  Showtime <CalendarPlus className='size-4' />
+                </div>
+                <div
+                  onClick={() => setShowDeleteDialog(true)}
                   className='w-full bg-white outline-none text-rose-700 focus:text-rose-400 transition-colors hover:bg-muted rounded-sm cursor-pointer flex justify-between items-center text-sm p-1.5'
                 >
-                  Delete <Trash2 className='h-4' />
+                  Delete <Trash2 className='size-4' />
                 </div>
               </PopoverContent>
             </Popover>

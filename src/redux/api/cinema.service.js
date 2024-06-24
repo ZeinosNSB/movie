@@ -20,8 +20,19 @@ export const cinemaApi = createApi({
         url: 'QuanLyRap/LayThongTinLichChieuPhim',
         params: { maPhim }
       })
+    }),
+    getCinemaComplexInfo: build.query({
+      query: maHeThongRap => ({
+        url: 'QuanLyRap/LayThongTinCumRapTheoHeThong',
+        params: { maHeThongRap }
+      })
     })
   })
 })
 
-export const { useGetCinemaInfoQuery, useGetCinemaShowtimeInfoQuery, useGetFilmInfoQuery } = cinemaApi
+export const {
+  useGetCinemaInfoQuery,
+  useGetCinemaShowtimeInfoQuery,
+  useGetFilmInfoQuery,
+  useGetCinemaComplexInfoQuery
+} = cinemaApi

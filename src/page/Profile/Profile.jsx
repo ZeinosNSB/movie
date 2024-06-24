@@ -20,7 +20,6 @@ function Profile() {
 
   const [updateClientUser, { isLoading }] = useUpdateClientUserMutation()
 
-  console.log(userInfo)
   const form = useForm({
     defaultValues: {
       taiKhoan: '',

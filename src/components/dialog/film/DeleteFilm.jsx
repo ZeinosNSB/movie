@@ -14,14 +14,15 @@ import {
 } from '@/components/ui/dialog'
 import { useDeleteFilmMutation } from '@/redux/api/film.service'
 
-export function DeleteFilm({ film, showTrigger = true, ...props }) {
+export function DeleteFilm({ id, showTrigger = true, ...props }) {
   const [deleteFilm, { isLoading }] = useDeleteFilmMutation()
 
   const handleDeleteFilm = async () => {
     try {
-      await deleteFilm(film.maPhim).unwrap()
+      await deleteFilm(id).unwrap()
       toast.success('User deleted successfully')
     } catch (error) {
+      //I'm experiencing an issue where I can successfully delete after add new films, but an error message from the server appears afterward. Please understand.
       const err = error?.data?.content
       toast.error(err)
     }

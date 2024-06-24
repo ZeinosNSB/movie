@@ -85,7 +85,8 @@ export function AddFilm() {
       form.reset()
       await toast.success('Film added successfully')
     } catch (error) {
-      console.error('Error submitting form:', error)
+      const err = error?.data?.content
+      toast.error(err)
     }
   }
 

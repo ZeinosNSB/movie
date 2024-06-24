@@ -23,8 +23,6 @@ function UpdateUser({ ids, user, onOpenChange, ...props }) {
     resolver: zodResolver(userSchema)
   })
 
-  console.log(userInfo)
-
   useEffect(() => {
     form.setValue('taiKhoan', userInfo?.taiKhoan)
     form.setValue('email', userInfo?.email)
@@ -44,7 +42,6 @@ function UpdateUser({ ids, user, onOpenChange, ...props }) {
       toast.success('User updated successfully')
     } catch (error) {
       const err = error?.data?.content
-      console.log(err)
       const userError = err?.startsWith('Tài khoản') && err
       const emailError = err?.startsWith('Email') && err
 

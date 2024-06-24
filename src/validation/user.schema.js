@@ -16,11 +16,11 @@ export const userSchema = z
     soDt: z.string().min(10, {
       message: 'Phone number must be at least 10 digits.'
     }),
-    maNhom: z.string().min(1, {
-      message: 'Group ID cannot be empty.'
+    maNhom: z.string({
+      required_error: 'Please select an group ID to display.'
     }),
-    maLoaiNguoiDung: z.string().min(1, {
-      message: 'User type cannot be empty.'
+    maLoaiNguoiDung: z.string({
+      required_error: 'Please select an user type to display.'
     })
   })
   .refine(value => value.matKhau === value.matKhauXacNhan, {
