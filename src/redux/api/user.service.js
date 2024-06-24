@@ -46,7 +46,7 @@ export const userApi = createApi({
         method: 'POST',
         data: body
       }),
-      invalidatesTags: [{ type: 'User', id: 'LIST' }]
+      invalidatesTags: (result, error) => (error ? [] : [{ type: 'User', id: 'LIST' }])
     }),
     updateUser: build.mutation({
       query: body => ({
@@ -75,7 +75,7 @@ export const userApi = createApi({
         method: 'DELETE',
         params: { taiKhoan }
       }),
-      invalidatesTags: [{ type: 'User', id: 'LIST' }]
+      invalidatesTags: (result, error) => (error ? [] : [{ type: 'User', id: 'LIST' }])
     })
   })
 })
