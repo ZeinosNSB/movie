@@ -18,7 +18,6 @@ import {
 import { Edit, Trash2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
-import { DeleteFilm } from '@/components/dialog/film/DeleteFilm'
 import AddUser from '@/components/dialog/user/AddUser'
 import DeleteUser from '@/components/dialog/user/DeleteUser'
 import UpdateUser from '@/components/sheet/user/UpdateUser'
@@ -272,8 +271,8 @@ function User() {
 
         <div className='ml-auto gap-2'>
           {table.getFilteredSelectedRowModel().rows.length > 0 ? (
-            <DeleteFilm
-              tasks={table.getFilteredSelectedRowModel().rows.map(row => row.original)}
+            <DeleteUser
+              id={table.getFilteredSelectedRowModel().rows.map(row => row.original.taiKhoan)}
               onSuccess={() => table.toggleAllRowsSelected(false)}
             />
           ) : null}

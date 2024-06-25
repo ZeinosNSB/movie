@@ -236,7 +236,7 @@ function Films() {
         <div className='ml-auto gap-2'>
           {table.getFilteredSelectedRowModel().rows.length > 0 ? (
             <DeleteFilm
-              tasks={table.getFilteredSelectedRowModel().rows.map(row => row.original)}
+              id={table.getFilteredSelectedRowModel().rows.map(row => row.original.maPhim)}
               onSuccess={() => table.toggleAllRowsSelected(false)}
             />
           ) : null}

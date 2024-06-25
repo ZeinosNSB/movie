@@ -17,6 +17,10 @@ import { useDeleteFilmMutation } from '@/redux/api/film.service'
 export function DeleteFilm({ id, showTrigger = true, ...props }) {
   const [deleteFilm, { isLoading }] = useDeleteFilmMutation()
 
+  if (id.length === 1) {
+    id = id[0]
+  }
+
   const handleDeleteFilm = async () => {
     try {
       await deleteFilm(id).unwrap()

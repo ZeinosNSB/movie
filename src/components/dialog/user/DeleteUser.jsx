@@ -17,6 +17,10 @@ import { useDeleteUserMutation } from '@/redux/api/user.service'
 function DeleteUser({ id, showTrigger = true, ...props }) {
   const [deleteUser, { isLoading }] = useDeleteUserMutation()
 
+  if (id.length === 1) {
+    id = id[0]
+  }
+
   const handleDelete = async () => {
     try {
       await deleteUser(id).unwrap()
